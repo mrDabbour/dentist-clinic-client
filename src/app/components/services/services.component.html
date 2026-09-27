@@ -1,0 +1,57 @@
+<section class="services" id="services">
+
+  <div class="services-container">
+
+    <div class="section-label">
+      <span></span>
+      OUR SERVICES
+    </div>
+
+    <div class="services-heading">
+
+      <div>
+        <h2>Comprehensive dental care</h2>
+
+        <p>
+          From routine check-ups to cosmetic treatments,
+          we offer practical dental care for you and your family.
+        </p>
+      </div>
+
+      <a href="#">
+        View all services →
+      </a>
+
+    </div>
+
+
+    <div class="services-grid">
+
+      <article
+        class="service-card"
+        *ngFor="let service of services"
+      >
+
+        <div class="service-icon">
+          {{ service.icon }}
+        </div>
+
+        <h3>
+          {{ service.title }}
+        </h3>
+
+        <p>
+          {{ service.description }}
+        </p>
+
+        <a href="#">
+          Learn more →
+        </a>
+
+      </article>
+
+    </div>
+
+  </div>
+
+</section>

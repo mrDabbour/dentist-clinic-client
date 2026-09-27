@@ -1,0 +1,146 @@
+.hero {
+    max-width: 1200px;
+    min-height: 620px;
+
+    margin: 0 auto;
+    padding: 80px 24px;
+
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    align-items: center;
+    gap: 70px;
+}
+
+.eyebrow {
+    color: #1677ff;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+h1 {
+    max-width: 650px;
+    margin: 15px 0 20px;
+
+    color: #10213d;
+
+    font-size: 64px;
+    line-height: 1.05;
+    letter-spacing: -2px;
+}
+
+.description {
+    max-width: 600px;
+
+    color: #64748b;
+
+    font-size: 18px;
+    line-height: 1.7;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 12px;
+
+    margin-top: 32px;
+}
+
+.hero-actions button {
+    padding: 15px 24px;
+
+    border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.primary-button {
+    border: none;
+
+    background: #1677ff;
+    color: white;
+}
+
+.secondary-button {
+    border: 1px solid #d7dce2;
+
+    background: white;
+    color: #14213d;
+}
+
+.trust {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+
+    margin-top: 35px;
+
+    color: #64748b;
+    font-size: 13px;
+}
+
+.hero-card {
+    display: flex;
+    justify-content: center;
+}
+
+.appointment-card {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 45px;
+
+    background: #eef6ff;
+
+    border-radius: 24px;
+}
+
+.small-title {
+    color: #1677ff;
+
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.appointment-card h2 {
+    margin: 12px 0;
+
+    color: #10213d;
+
+    font-size: 32px;
+}
+
+.appointment-card p {
+    color: #64748b;
+    line-height: 1.6;
+}
+
+.appointment-card button {
+    width: 100%;
+
+    margin-top: 25px;
+    padding: 15px;
+
+    border: none;
+    border-radius: 8px;
+
+    background: #10213d;
+    color: white;
+
+    font-weight: 600;
+    cursor: pointer;
+}
+
+@media (max-width: 800px) {
+    .hero {
+        grid-template-columns: 1fr;
+        padding-top: 50px;
+    }
+
+    h1 {
+        font-size: 44px;
+    }
+}

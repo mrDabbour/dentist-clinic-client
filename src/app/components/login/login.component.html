@@ -1,0 +1,43 @@
+<div class="login-container">
+
+  <h2>Staff Login</h2>
+
+  <form (ngSubmit)="login()">
+
+    <div>
+      <label for="email">Email</label>
+
+      <input
+        id="email"
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        placeholder="Email"
+        required
+      />
+    </div>
+
+    <div>
+      <label for="password">Password</label>
+
+      <input
+        id="password"
+        type="password"
+        name="password"
+        [(ngModel)]="password"
+        placeholder="Password"
+        required
+      />
+    </div>
+
+    <button type="submit">
+      Login
+    </button>
+
+  </form>
+
+  <p *ngIf="message">
+    {{ message }}
+  </p>
+
+</div>

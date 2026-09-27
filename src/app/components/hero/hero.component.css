@@ -1,0 +1,426 @@
+/* ========================================
+   HERO
+======================================== */
+
+.hero {
+    min-height: 640px;
+
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+
+    background: #fffaf0;
+
+    overflow: hidden;
+}
+
+
+/* ========================================
+   LEFT CONTENT
+======================================== */
+
+.hero-content {
+    padding:
+        95px 70px 70px max(70px, calc((100vw - 1200px) / 2));
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* Small heading */
+
+.hero-label {
+    display: flex;
+    align-items: center;
+
+    gap: 13px;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: 2.3px;
+}
+
+
+.hero-label span {
+    width: 35px;
+    height: 2px;
+
+    background: #e6bd56;
+}
+
+
+/* Main heading */
+
+h1 {
+    margin:
+        25px 0 24px;
+
+    color: #0f2d54;
+
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: clamp(48px, 4.5vw, 72px);
+
+    font-weight: 500;
+
+    line-height: 1.04;
+
+    letter-spacing: -2px;
+}
+
+
+/* Description */
+
+.hero-description {
+    max-width: 590px;
+
+    margin: 0;
+
+    color: #536174;
+
+    font-size: 17px;
+
+    line-height: 1.8;
+}
+
+
+/* ========================================
+   BUTTONS
+======================================== */
+
+.hero-buttons {
+    margin-top: 34px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 16px;
+}
+
+
+.primary-button,
+.secondary-button {
+    min-height: 54px;
+
+    padding: 0 24px;
+
+    border-radius: 7px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 11px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    text-decoration: none;
+
+    transition: 0.2s ease;
+}
+
+
+/* Primary */
+
+.primary-button {
+    border: 1px solid #0f2d54;
+
+    background: #0f2d54;
+
+    color: white;
+}
+
+
+.primary-button svg {
+    width: 18px;
+    height: 18px;
+
+    fill: none;
+
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+
+.primary-button:hover {
+    background: #173e6d;
+
+    transform: translateY(-1px);
+}
+
+
+/* Secondary */
+
+.secondary-button {
+    border: 1px solid #0f2d54;
+
+    background: transparent;
+
+    color: #0f2d54;
+}
+
+
+.secondary-button:hover {
+    background: #ffffff;
+}
+
+
+/* ========================================
+   FEATURES
+======================================== */
+
+.hero-features {
+    margin-top: 55px;
+
+    display: flex;
+
+    gap: 32px;
+}
+
+
+.feature {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+}
+
+
+.feature-icon {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #fff1c9;
+
+    color: #a87b15;
+
+    font-size: 17px;
+    font-weight: 700;
+}
+
+
+.feature div:last-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.feature strong {
+    color: #142d4c;
+
+    font-size: 12px;
+}
+
+
+.feature span {
+    color: #778397;
+
+    font-size: 10px;
+}
+
+
+/* ========================================
+   CLINIC IMAGE
+======================================== */
+
+.hero-image {
+    min-height: 640px;
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #e9f1f8;
+}
+
+
+.hero-image img {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+
+    inset: 0;
+
+    object-fit: cover;
+
+    object-position: center;
+}
+
+
+/* subtle warm overlay */
+
+.hero-image::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(90deg,
+            rgba(255, 250, 240, 0.15),
+            transparent 35%);
+
+    pointer-events: none;
+}
+
+
+/* Image text */
+
+.image-message {
+    position: absolute;
+
+    z-index: 2;
+
+    top: 70px;
+    left: 45px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    color: #0f2d54;
+}
+
+
+.image-message span {
+    font-size: 10px;
+
+    letter-spacing: 2px;
+
+    font-weight: 700;
+}
+
+
+.image-message strong {
+    font-family:
+        Georgia,
+        "Times New Roman",
+        serif;
+
+    font-size: 21px;
+
+    font-weight: 500;
+}
+
+
+/* ========================================
+   TABLET
+======================================== */
+
+@media (max-width: 1000px) {
+
+    .hero-content {
+        padding:
+            70px 40px;
+    }
+
+
+    .hero-features {
+        gap: 18px;
+    }
+
+
+    .feature-icon {
+        width: 36px;
+        height: 36px;
+    }
+
+}
+
+
+/* ========================================
+   MOBILE
+======================================== */
+
+@media (max-width: 800px) {
+
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+
+    .hero-content {
+        padding:
+            60px 24px;
+    }
+
+
+    h1 {
+        font-size: 50px;
+    }
+
+
+    .hero-image {
+        min-height: 480px;
+    }
+
+
+    .hero-features {
+        flex-direction: column;
+
+        margin-top: 40px;
+    }
+
+}
+
+
+/* ========================================
+   SMALL MOBILE
+======================================== */
+
+@media (max-width: 500px) {
+
+    h1 {
+        font-size: 42px;
+    }
+
+
+    .hero-description {
+        font-size: 15px;
+    }
+
+
+    .hero-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+
+    .primary-button,
+    .secondary-button {
+        width: 100%;
+    }
+
+
+    .hero-image {
+        min-height: 380px;
+    }
+
+}

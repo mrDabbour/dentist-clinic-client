@@ -1,0 +1,92 @@
+<div class="appointments-page">
+
+  <header class="page-header">
+    <div>
+      <p class="page-label">CLINIC MANAGEMENT</p>
+
+      <h1>Appointments</h1>
+
+      <p class="page-description">
+        Manage and review clinic appointments.
+      </p>
+    </div>
+  </header>
+
+
+  <!-- Loading -->
+  <p *ngIf="loading">
+    Loading appointments...
+  </p>
+
+
+  <!-- Error -->
+  <p *ngIf="errorMessage">
+    {{ errorMessage }}
+  </p>
+
+
+  <!-- Column headings -->
+  <div
+    class="table-heading"
+    *ngIf="!loading && appointments.length > 0">
+
+    <span>Patient / Service</span>
+    <span>Dentist</span>
+    <span>Date</span>
+    <span>Time</span>
+    <span>Status</span>
+
+  </div>
+
+
+  <!-- Appointments -->
+  <div
+    class="appointment-row"
+    *ngFor="let appointment of appointments">
+
+    <div>
+      <strong>
+        {{ appointment.patientName }}
+      </strong>
+
+      <p>
+        {{ appointment.dentalServiceName }}
+      </p>
+    </div>
+
+
+    <div>
+      Dr {{ appointment.dentistName }}
+    </div>
+
+
+    <div>
+      {{ appointment.startTime | date:'mediumDate' }}
+    </div>
+
+
+    <div>
+      {{ appointment.startTime | date:'shortTime' }}
+    </div>
+
+
+    <div>
+      {{ appointment.status }}
+    </div>
+
+  </div>
+
+
+  <!-- Empty state -->
+  <p
+    *ngIf="
+      !loading &&
+      !errorMessage &&
+      appointments.length === 0
+    ">
+
+    No appointments found.
+
+  </p>
+
+</div>

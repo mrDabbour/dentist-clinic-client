@@ -1,0 +1,221 @@
+<div class="dashboard-layout">
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <div class="brand">
+        <div class="brand-icon">D</div>
+
+        <div>
+          <h2>Dintest</h2>
+          <span>Dental Clinic</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <a class="nav-item active">
+          <span>⌂</span>
+          Dashboard
+        </a>
+
+        <a class="nav-item" routerLink="/appointments">
+          <span>▣</span>
+          Appointments
+        </a>
+
+        <a class="nav-item">
+          <span>♙</span>
+          Patients
+        </a>
+
+        <a class="nav-item">
+          <span>+</span>
+          Dentists
+        </a>
+
+        <a class="nav-item">
+          <span>◇</span>
+          Services
+        </a>
+      </nav>
+    </div>
+
+    <button class="logout-button" (click)="logout()">Logout</button>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <header class="topbar">
+      <div>
+        <p class="page-label">STAFF PORTAL</p>
+        <h1>Dashboard</h1>
+      </div>
+
+      <div class="staff-profile">
+        <div class="avatar">M</div>
+
+        <div>
+          <strong>Clinic Staff</strong>
+          <span>Administrator</span>
+        </div>
+      </div>
+    </header>
+
+    <section class="welcome-section">
+      <h2>Good to see you</h2>
+      <p>Here's what's happening at the clinic.</p>
+    </section>
+
+    <section class="summary-grid">
+      <div class="summary-card">
+        <span>Total Appointments</span>
+        <strong>{{ totalAppointments }}</strong>
+        <p>All scheduled appointments</p>
+      </div>
+
+      <div class="summary-card">
+        <span>Pending</span>
+        <strong>{{ pendingAppointments }}</strong>
+        <p>Waiting for confirmation</p>
+      </div>
+
+      <div class="summary-card">
+        <span>Completed</span>
+        <strong>{{ completedAppointments }}</strong>
+        <p>Finished appointments</p>
+      </div>
+    </section>
+    <!-- Temporary appointment area -->
+    <section class="appointments-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">SCHEDULE</p>
+          <h2>Appointments</h2>
+        </div>
+      </div>
+
+      <p *ngIf="loading" class="state-message">Loading appointments...</p>
+
+      <p *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </p>
+
+      <div
+        class="appointment-card"
+        *ngFor="let appointment of activeAppointments"
+      >
+        <div class="appointment-time">
+          {{ appointment.startTime | date: "shortTime" }}
+        </div>
+
+        <div class="appointment-details">
+          <h3>
+            {{ appointment.patientName }}
+          </h3>
+
+          <p>Dr {{ appointment.dentistName }}</p>
+
+          <span class="appointment-date">
+            {{ appointment.startTime | date: "mediumDate" }}
+          </span>
+        </div>
+
+        <div class="appointment-actions">
+          <button
+            *ngIf="appointment.status === 'Confirmed'"
+            class="complete-button"
+            (click)="completeAppointment(appointment.id)"
+          >
+            Complete
+          </button>
+          <button
+            *ngIf="
+              appointment.status === 'Pending' ||
+              appointment.status === 'Confirmed'
+            "
+            class="cancel-button"
+            (click)="cancelAppointment(appointment.id)"
+          >
+            Cancel
+          </button>
+
+          <button
+            *ngIf="appointment.status === 'Confirmed'"
+            class="no-show-button"
+            (click)="markNoShow(appointment.id)"
+          >
+            No Show
+          </button>
+
+          <div
+            class="status"
+            [class.completed]="appointment.status === 'Completed'"
+            [class.pending]="appointment.status === 'Pending'"
+            [class.confirmed]="appointment.status === 'Confirmed'"
+            [class.cancelled]="appointment.status === 'Cancelled'"
+          >
+            {{ appointment.status }}
+          </div>
+
+          <button
+            *ngIf="appointment.status === 'Pending'"
+            class="confirm-button"
+            (click)="confirmAppointment(appointment.id)"
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+
+      <p
+        *ngIf="!loading && !errorMessage && appointments.length === 0"
+        class="state-message"
+      >
+        No appointments found.
+      </p>
+    </section>
+
+    <section class="appointments-section history-section">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">RECORDS</p>
+          <h2>Appointment History</h2>
+        </div>
+      </div>
+
+      <div
+        class="appointment-card history-card"
+        *ngFor="let appointment of appointmentHistory"
+      >
+        <div class="appointment-time">
+          {{ appointment.startTime | date: "shortTime" }}
+        </div>
+
+        <div class="appointment-details">
+          <h3>{{ appointment.patientName }}</h3>
+
+          <p>
+            Dr {{ appointment.dentistName }} ·
+            {{ appointment.dentalServiceName }}
+          </p>
+
+          <span class="appointment-date">
+            {{ appointment.startTime | date: "mediumDate" }}
+          </span>
+        </div>
+
+        <div
+          class="status"
+          [class.completed]="appointment.status === 'Completed'"
+          [class.cancelled]="appointment.status === 'Cancelled'"
+          [class.no-show]="appointment.status === 'NoShow'"
+        >
+          {{ appointment.status }}
+        </div>
+      </div>
+
+      <p *ngIf="appointmentHistory.length === 0" class="state-message">
+        No appointment history yet.
+      </p>
+    </section>
+  </main>
+</div>

@@ -1,0 +1,282 @@
+/* =========================================
+   APPOINTMENTS PAGE
+========================================= */
+
+:host {
+    display: block;
+    min-height: 100vh;
+    background: #f5f7fb;
+    color: #172033;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+
+/* =========================================
+   PAGE CONTAINER
+========================================= */
+
+.appointments-page {
+    width: 100%;
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 48px 52px 70px;
+}
+
+
+/* =========================================
+   PAGE HEADER
+========================================= */
+
+.page-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+
+    margin-bottom: 34px;
+    padding-bottom: 24px;
+
+    border-bottom: 1px solid #e4e8ef;
+}
+
+.page-label {
+    margin: 0 0 8px;
+
+    color: #55708e;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.7px;
+}
+
+.page-header h1 {
+    margin: 0;
+
+    color: #172033;
+
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.8px;
+}
+
+.page-description {
+    margin: 9px 0 0;
+
+    color: #7b8494;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+/* =========================================
+   APPOINTMENT ROW
+========================================= */
+
+.appointment-row {
+    display: grid;
+
+    grid-template-columns:
+        minmax(220px, 1.7fr) minmax(170px, 1.2fr) minmax(140px, 1fr) 100px 110px;
+
+    align-items: center;
+    gap: 24px;
+
+    min-height: 92px;
+
+    margin-bottom: 12px;
+    padding: 20px 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e8ebf0;
+    border-radius: 14px;
+
+    box-shadow:
+        0 2px 4px rgba(16, 24, 40, 0.02),
+        0 8px 24px rgba(16, 24, 40, 0.035);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.appointment-row:hover {
+    transform: translateY(-2px);
+
+    border-color: #d8dee8;
+
+    box-shadow:
+        0 4px 8px rgba(16, 24, 40, 0.04),
+        0 12px 30px rgba(16, 24, 40, 0.07);
+}
+
+
+/* =========================================
+   PATIENT
+========================================= */
+
+.appointment-row strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #172033;
+
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.appointment-row p {
+    margin: 0;
+
+    color: #8a93a2;
+
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+
+/* =========================================
+   OTHER COLUMNS
+========================================= */
+
+.appointment-row>div:nth-child(2),
+.appointment-row>div:nth-child(3),
+.appointment-row>div:nth-child(4) {
+    color: #566071;
+
+    font-size: 13px;
+    font-weight: 500;
+}
+
+
+/* =========================================
+   STATUS
+========================================= */
+
+.appointment-row>div:last-child {
+    justify-self: start;
+
+    min-width: 88px;
+
+    padding: 7px 12px;
+
+    background: #eef4fb;
+    color: #315c86;
+
+    border-radius: 999px;
+
+    text-align: center;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+}
+
+
+/* =========================================
+   LOADING / ERROR STATES
+========================================= */
+
+.appointments-page>p {
+    padding: 22px 24px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7eaf0;
+    border-radius: 12px;
+
+    color: #6f7887;
+
+    font-size: 14px;
+}
+
+
+/* =========================================
+   TABLE-LIKE COLUMN LABELS
+   We'll use these in the next step.
+========================================= */
+
+.table-heading {
+    display: grid;
+
+    grid-template-columns:
+        minmax(220px, 1.7fr) minmax(170px, 1.2fr) minmax(140px, 1fr) 100px 110px;
+
+    gap: 24px;
+
+    padding: 0 24px 12px;
+
+    color: #929aaa;
+
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .appointments-page {
+        padding: 36px 28px 60px;
+    }
+
+    .appointment-row {
+        grid-template-columns:
+            minmax(180px, 1.5fr) minmax(150px, 1fr) 120px 90px;
+
+        gap: 18px;
+    }
+
+    .appointment-row>div:nth-child(3) {
+        display: none;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .appointments-page {
+        padding: 28px 18px 50px;
+    }
+
+    .page-header {
+        align-items: flex-start;
+    }
+
+    .page-header h1 {
+        font-size: 28px;
+    }
+
+    .appointment-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px 20px;
+
+        padding: 18px;
+    }
+
+    .appointment-row>div:first-child {
+        width: 100%;
+    }
+
+    .appointment-row>div:nth-child(2),
+    .appointment-row>div:nth-child(3),
+    .appointment-row>div:nth-child(4) {
+        font-size: 12px;
+    }
+
+    .appointment-row>div:last-child {
+        margin-left: auto;
+    }
+}
