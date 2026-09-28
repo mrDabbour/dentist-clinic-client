@@ -13,6 +13,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { AppointmentsComponent } from './components/appointments/appointments.component';
+import { PatientsComponent } from './components/patients/patients.component';
+import { PatientDetailsComponent } from './components/patient-details/patient-details.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -22,7 +24,9 @@ import { AppointmentsComponent } from './components/appointments/appointments.co
     LoginComponent,
     HomeComponent,
     DashboardComponent,
-    AppointmentsComponent
+    AppointmentsComponent,
+    PatientsComponent,
+    PatientDetailsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,278 @@
+<div class="patient-details-page">
+
+  <div class="top-bar">
+    <a routerLink="/patients" class="back-link">
+      ← Back to Patients
+    </a>
+  </div>
+
+  <p class="loading" *ngIf="loading">
+    Loading patient...
+  </p>
+
+  <div class="error-message" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div
+    class="patient-container"
+    *ngIf="!loading && !errorMessage && patient"
+  >
+
+    <!-- Patient Header -->
+    <header class="patient-header">
+
+      <div class="patient-identity">
+
+        <div class="patient-avatar">
+          {{ patient.firstName.charAt(0) }}
+          {{ patient.lastName.charAt(0) }}
+        </div>
+
+        <div>
+          <span class="eyebrow">
+            PATIENT RECORD
+          </span>
+
+          <h1>
+            {{ patient.firstName }}
+            {{ patient.lastName }}
+          </h1>
+
+          <p>
+            Patient ID #{{ patient.id }}
+          </p>
+        </div>
+
+      </div>
+
+      <button
+        type="button"
+        class="edit-button"
+      >
+        Edit Patient
+      </button>
+
+    </header>
+
+
+    <!-- Contact Information -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Contact Information</h2>
+
+          <p>
+            Patient contact and account details.
+          </p>
+        </div>
+
+      </div>
+
+      <div class="details-grid">
+
+        <div class="detail-item">
+          <span class="detail-label">
+            First Name
+          </span>
+
+          <strong>
+            {{ patient.firstName }}
+          </strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            Last Name
+          </span>
+
+          <strong>
+            {{ patient.lastName }}
+          </strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            Email Address
+          </span>
+
+          <strong>
+            {{ patient.email }}
+          </strong>
+        </div>
+
+        <div class="detail-item">
+          <span class="detail-label">
+            Phone Number
+          </span>
+
+          <strong>
+            {{ patient.phone || 'Not provided' }}
+          </strong>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- Appointment History -->
+    <section class="appointments-card">
+
+      <div class="card-header">
+
+        <div>
+          <h2>Appointments</h2>
+
+          <p>
+            Appointment history for this patient.
+          </p>
+        </div>
+
+      </div>
+
+
+      <!-- Loading -->
+      <div
+        class="empty-appointments"
+        *ngIf="appointmentsLoading"
+      >
+        Loading appointment history...
+      </div>
+
+
+      <!-- Error -->
+      <div
+        class="empty-appointments"
+        *ngIf="
+          !appointmentsLoading &&
+          appointmentsErrorMessage
+        "
+      >
+        {{ appointmentsErrorMessage }}
+      </div>
+
+
+      <!-- Empty -->
+      <div
+        class="empty-appointments"
+        *ngIf="
+          !appointmentsLoading &&
+          !appointmentsErrorMessage &&
+          appointments.length === 0
+        "
+      >
+        No appointments found for this patient.
+      </div>
+
+
+      <!-- Appointments -->
+      <div
+        class="appointment-history"
+        *ngIf="
+          !appointmentsLoading &&
+          !appointmentsErrorMessage &&
+          appointments.length > 0
+        "
+      >
+
+        <div
+          class="appointment-item"
+          *ngFor="let appointment of appointments"
+        >
+
+          <div class="appointment-main">
+
+            <div>
+              <span class="detail-label">
+                Service
+              </span>
+
+              <strong>
+                {{ appointment.dentalServiceName }}
+              </strong>
+            </div>
+
+
+            <div>
+              <span class="detail-label">
+                Dentist
+              </span>
+
+              <strong>
+                {{ appointment.dentistName }}
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div class="appointment-main">
+
+            <div>
+              <span class="detail-label">
+                Date
+              </span>
+
+              <strong>
+                {{
+                  appointment.startTime
+                    | date:'mediumDate'
+                }}
+              </strong>
+            </div>
+
+
+            <div>
+              <span class="detail-label">
+                Time
+              </span>
+
+              <strong>
+                {{
+                  appointment.startTime
+                    | date:'shortTime'
+                }}
+              </strong>
+            </div>
+
+
+            <div>
+              <span class="detail-label">
+                Status
+              </span>
+
+              <strong>
+                {{ appointment.status }}
+              </strong>
+            </div>
+
+          </div>
+
+
+          <div
+            class="appointment-notes"
+            *ngIf="appointment.notes"
+          >
+
+            <span class="detail-label">
+              Notes
+            </span>
+
+            <p>
+              {{ appointment.notes }}
+            </p>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </div>
+
+</div>

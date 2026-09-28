@@ -35,8 +35,19 @@ export class AppointmentService {
 
   constructor(private http: HttpClient) { }
 
-  getAppointments(): Observable<Appointment[]> {
-    return this.http.get<Appointment[]>(this.apiUrl);
+  getAppointments(
+    patientId?: number
+  ): Observable<Appointment[]> {
+
+    if (patientId) {
+      return this.http.get<Appointment[]>(
+        `${this.apiUrl}?patientId=${patientId}`
+      );
+    }
+
+    return this.http.get<Appointment[]>(
+      this.apiUrl
+    );
   }
 
   confirmAppointment(id: number): Observable<any> {
@@ -64,6 +75,20 @@ export class AppointmentService {
     return this.http.patch(
       `${this.apiUrl}/${id}/no-show`,
       {}
+    );
+  }
+
+  createAppointment(appointment: {
+    patientId: number;
+    dentistId: number;
+    dentalServiceId: number;
+    startTime: string;
+    notes?: string;
+  }): Observable<any> {
+
+    return this.http.post(
+      this.apiUrl,
+      appointment
     );
   }
 }
