@@ -1,0 +1,467 @@
+<div class="dentists-page">
+  <div class="dentists-container">
+    <!-- =====================================
+         HEADER
+    ====================================== -->
+    <header class="page-header">
+      <div>
+        <span class="eyebrow"> CLINIC MANAGEMENT </span>
+
+        <h1>Dental Team</h1>
+
+        <p>View and manage the clinic's dental professionals.</p>
+      </div>
+
+      <button
+        type="button"
+        class="primary-button"
+        (click)="openAddForm()"
+        *ngIf="!showAddForm"
+      >
+        + Add Dentist
+      </button>
+    </header>
+
+    <!-- =====================================
+         ADD DENTIST FORM
+    ====================================== -->
+    <section class="dentist-form-card" *ngIf="showAddForm">
+      <div class="form-header">
+        <div>
+          <span class="eyebrow"> NEW CLINICIAN </span>
+
+          <h2>Add Dentist</h2>
+
+          <p>Add a dental professional to the clinic team.</p>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="closeAddForm()"
+          [disabled]="creating"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <!-- First Name -->
+        <div class="form-field">
+          <label> First Name * </label>
+
+          <input
+            type="text"
+            [(ngModel)]="newDentist.firstName"
+            placeholder="Sarah"
+          />
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-field">
+          <label> Last Name * </label>
+
+          <input
+            type="text"
+            [(ngModel)]="newDentist.lastName"
+            placeholder="Wilson"
+          />
+        </div>
+
+        <!-- Email -->
+        <div class="form-field">
+          <label> Email * </label>
+
+          <input
+            type="email"
+            [(ngModel)]="newDentist.email"
+            placeholder="sarah@clinic.co.nz"
+          />
+        </div>
+
+        <!-- Phone -->
+        <div class="form-field">
+          <label> Phone * </label>
+
+          <input
+            type="tel"
+            [(ngModel)]="newDentist.phone"
+            placeholder="021 000 0000"
+          />
+        </div>
+
+        <!-- Registration Number -->
+        <div class="form-field">
+          <label> Registration Number * </label>
+
+          <input
+            type="text"
+            [(ngModel)]="newDentist.registrationNumber"
+            placeholder="DCNZ-12345"
+          />
+        </div>
+
+        <!-- Specialty -->
+        <div class="form-field">
+          <label> Specialty * </label>
+
+          <input
+            type="text"
+            [(ngModel)]="newDentist.specialty"
+            placeholder="General Dentistry"
+          />
+        </div>
+
+        <!-- Biography -->
+        <div class="form-field full-width">
+          <label> Biography </label>
+
+          <textarea
+            [(ngModel)]="newDentist.biography"
+            rows="4"
+            placeholder="Short professional biography..."
+          ></textarea>
+        </div>
+      </div>
+
+      <!-- Form Error -->
+      <div class="form-error" *ngIf="formErrorMessage">
+        {{ formErrorMessage }}
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="closeAddForm()"
+          [disabled]="creating"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="createDentist()"
+          [disabled]="creating"
+        >
+          {{ creating ? "Adding Dentist..." : "Add Dentist" }}
+        </button>
+      </div>
+    </section>
+
+    <!-- =====================================
+         SUCCESS MESSAGE
+    ====================================== -->
+    <div class="success-message" *ngIf="successMessage">
+      {{ successMessage }}
+    </div>
+
+    <section class="team-summary">
+      <div class="summary-card">
+        <span class="summary-label"> TOTAL DENTISTS </span>
+
+        <strong>
+          {{ dentists.length }}
+        </strong>
+
+        <small> Registered clinicians </small>
+      </div>
+
+      <div class="summary-card active-summary">
+        <span class="summary-label"> ACTIVE </span>
+
+        <strong>
+          {{ activeDentistsCount }}
+        </strong>
+
+        <small> Currently practising </small>
+      </div>
+
+      <div class="summary-card inactive-summary">
+        <span class="summary-label"> INACTIVE </span>
+
+        <strong>
+          {{ inactiveDentistsCount }}
+        </strong>
+
+        <small> Not currently practising </small>
+      </div>
+    </section>
+    <!-- =====================================
+         SEARCH TOOLBAR
+    ====================================== -->
+    <section class="toolbar">
+      <div class="search-box">
+        <span class="search-icon"> ⌕ </span>
+
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Search by dentist or specialty..."
+        />
+      </div>
+      <div class="status-filters">
+        <button
+          type="button"
+          [class.active]="statusFilter === 'all'"
+          (click)="setStatusFilter('all')"
+        >
+          All
+        </button>
+
+        <button
+          type="button"
+          [class.active]="statusFilter === 'active'"
+          (click)="setStatusFilter('active')"
+        >
+          Active
+        </button>
+
+        <button
+          type="button"
+          [class.active]="statusFilter === 'inactive'"
+          (click)="setStatusFilter('inactive')"
+        >
+          Inactive
+        </button>
+      </div>
+      <div class="dentist-count">
+        {{ filteredDentists.length }}
+
+        {{ filteredDentists.length === 1 ? "Dentist" : "Dentists" }}
+      </div>
+    </section>
+
+    <!-- =====================================
+         LOADING
+    ====================================== -->
+    <div class="state-card" *ngIf="loading">Loading dental team...</div>
+
+    <!-- =====================================
+         ERROR
+    ====================================== -->
+    <div class="error-message" *ngIf="!loading && errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <!-- =====================================
+         EMPTY
+    ====================================== -->
+    <div
+      class="state-card"
+      *ngIf="!loading && !errorMessage && filteredDentists.length === 0"
+    >
+      No dentists found.
+    </div>
+
+    <!-- =====================================
+         DENTIST GRID
+    ====================================== -->
+    <section
+      class="dentist-grid"
+      *ngIf="!loading && !errorMessage && filteredDentists.length > 0"
+    >
+      <article
+        class="dentist-card"
+        [class.inactive-card]="!dentist.isActive"
+        *ngFor="let dentist of filteredDentists"
+      >
+        <!-- Card Top -->
+        <div class="dentist-top">
+          <div class="dentist-avatar">
+            {{ getInitials(dentist) }}
+          </div>
+
+          <div class="card-badges">
+            <span
+              class="dentist-status"
+              [class.inactive-status]="!dentist.isActive"
+            >
+              <span class="status-dot"></span>
+
+              {{ dentist.isActive ? "ACTIVE" : "INACTIVE" }}
+            </span>
+
+            <span class="dentist-id"> #{{ dentist.id }} </span>
+          </div>
+        </div>
+
+        <!-- Dentist Information -->
+        <div class="dentist-info">
+          <span class="role-label"> DENTAL PROFESSIONAL </span>
+
+          <h2>
+            Dr {{ dentist.firstName }}
+            {{ dentist.lastName }}
+          </h2>
+
+          <div class="dentist-meta">
+            <div>
+              <span> REGISTRATION </span>
+
+              <strong>
+                {{ dentist.registrationNumber }}
+              </strong>
+            </div>
+
+            <div>
+              <span> CONTACT </span>
+
+              <strong>
+                {{ dentist.email }}
+              </strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Footer -->
+        <div class="card-footer">
+          <div class="availability" [class.inactive]="!dentist.isActive">
+            <span
+              class="status-dot"
+              [class.inactive-dot]="!dentist.isActive"
+            ></span>
+
+            {{ dentist.isActive ? "Active dentist" : "Inactive dentist" }}
+          </div>
+
+          <button
+            type="button"
+            class="card-edit-button"
+            (click)="startEditing(dentist)"
+          >
+            Edit Dentist
+          </button>
+        </div>
+      </article>
+    </section>
+  </div>
+  <!-- =====================================
+     EDIT DENTIST MODAL
+====================================== -->
+  <div class="edit-overlay" *ngIf="editingDentistId !== null">
+    <section class="edit-modal">
+      <div class="form-header">
+        <div>
+          <span class="eyebrow"> CLINICIAN RECORD </span>
+
+          <h2>Edit Dentist</h2>
+
+          <p>Update clinician information and practising status.</p>
+        </div>
+
+        <button
+          type="button"
+          class="close-button"
+          (click)="cancelEditing()"
+          [disabled]="savingEdit"
+        >
+          ×
+        </button>
+      </div>
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label>First Name *</label>
+
+          <input type="text" [(ngModel)]="editDentist.firstName" />
+        </div>
+
+        <div class="form-field">
+          <label>Last Name *</label>
+
+          <input type="text" [(ngModel)]="editDentist.lastName" />
+        </div>
+
+        <div class="form-field">
+          <label>Email *</label>
+
+          <input type="email" [(ngModel)]="editDentist.email" />
+        </div>
+
+        <div class="form-field">
+          <label>Phone *</label>
+
+          <input type="tel" [(ngModel)]="editDentist.phone" />
+        </div>
+
+        <div class="form-field">
+          <label>Registration Number *</label>
+
+          <input type="text" [(ngModel)]="editDentist.registrationNumber" />
+        </div>
+
+        <div class="form-field">
+          <label>Specialty *</label>
+
+          <input type="text" [(ngModel)]="editDentist.specialty" />
+        </div>
+
+        <!-- Status -->
+        <div class="form-field full-width">
+          <label>Dentist Status</label>
+
+          <div class="status-control">
+            <button
+              type="button"
+              class="status-option"
+              [class.selected-active]="editDentist.isActive"
+              (click)="editDentist.isActive = true"
+            >
+              <span class="status-circle active-circle"></span>
+
+              Active
+            </button>
+
+            <button
+              type="button"
+              class="status-option"
+              [class.selected-inactive]="!editDentist.isActive"
+              (click)="editDentist.isActive = false"
+            >
+              <span class="status-circle inactive-circle"></span>
+
+              Inactive
+            </button>
+          </div>
+
+          <small class="status-help">
+            Inactive dentists remain available in historical clinic records.
+          </small>
+        </div>
+
+        <div class="form-field full-width">
+          <label>Biography</label>
+
+          <textarea rows="4" [(ngModel)]="editDentist.biography"></textarea>
+        </div>
+      </div>
+
+      <div class="form-error" *ngIf="editErrorMessage">
+        {{ editErrorMessage }}
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="cancelEditing()"
+          [disabled]="savingEdit"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="button"
+          class="primary-button"
+          (click)="saveDentist()"
+          [disabled]="savingEdit"
+        >
+          {{ savingEdit ? "Saving Changes..." : "Save Changes" }}
+        </button>
+      </div>
+    </section>
+  </div>
+</div>

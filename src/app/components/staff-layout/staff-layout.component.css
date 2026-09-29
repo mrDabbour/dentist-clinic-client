@@ -1,0 +1,200 @@
+.staff-shell {
+    min-height: 100vh;
+    display: flex;
+    background: #f4f8f9;
+}
+
+
+.sidebar {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    bottom: 0;
+
+    width: 245px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    padding: 28px 18px 22px;
+
+    background: #ffffff;
+
+    border-right: 1px solid #dce8ea;
+
+    z-index: 100;
+}
+
+
+.staff-content {
+    width: calc(100% - 245px);
+
+    min-height: 100vh;
+
+    margin-left: 245px;
+}
+
+
+.brand {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    margin-bottom: 38px;
+
+    padding: 0 9px;
+}
+
+
+.brand-icon {
+    width: 39px;
+    height: 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 10px;
+
+    background:
+        linear-gradient(135deg,
+            #087f8c,
+            #20a3a8);
+
+    color: white;
+
+    font-weight: 800;
+}
+
+
+.brand-text h2 {
+    margin: 0;
+
+    color: #17354d;
+
+    font-size: 16px;
+}
+
+
+.brand-text span {
+    color: #8a9ca4;
+
+    font-size: 10px;
+}
+
+
+.menu-label {
+    margin: 0 12px 10px;
+
+    color: #9aa9af;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.3px;
+}
+
+
+.nav-menu {
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+}
+
+
+.nav-item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 44px;
+
+    padding: 0 13px;
+
+    border-radius: 9px;
+
+    color: #637984;
+
+    font-size: 12px;
+    font-weight: 650;
+
+    text-decoration: none;
+
+    transition:
+        background 0.15s ease,
+        color 0.15s ease;
+}
+
+
+.nav-item:hover {
+    background: #f0f8f8;
+
+    color: #087f8c;
+}
+
+
+.nav-item.active {
+    background: #e8f6f7;
+
+    color: #087f8c;
+
+    font-weight: 750;
+}
+
+
+.nav-icon {
+    width: 20px;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+
+.sidebar-footer {
+    padding-top: 18px;
+
+    border-top: 1px solid #e8eff0;
+}
+
+
+.staff-label {
+    margin: 0 10px 10px;
+
+    color: #9aa9af;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 1.1px;
+}
+
+
+.logout-button {
+    width: 100%;
+
+    padding: 11px;
+
+    background: transparent;
+
+    color: #71858e;
+
+    border: 1px solid #dce7e9;
+    border-radius: 8px;
+
+    font-weight: 650;
+
+    cursor: pointer;
+}
+
+
+.logout-button:hover {
+    background: #f7fafa;
+
+    color: #a44138;
+}

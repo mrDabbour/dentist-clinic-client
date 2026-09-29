@@ -1,0 +1,114 @@
+<div class="staff-shell">
+
+  <aside class="sidebar">
+
+    <div>
+
+      <div class="brand">
+
+        <div class="brand-icon">
+          D
+        </div>
+
+        <div class="brand-text">
+          <h2>Dintest</h2>
+          <span>Dental Clinic</span>
+        </div>
+
+      </div>
+
+
+      <div class="menu-label">
+        MANAGEMENT
+      </div>
+
+
+      <nav class="nav-menu">
+
+        <a
+          routerLink="/dashboard"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">⌂</span>
+
+          Dashboard
+        </a>
+
+
+        <a
+          routerLink="/appointments"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">▣</span>
+
+          Appointments
+        </a>
+
+
+        <a
+          routerLink="/patients"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">♙</span>
+
+          Patients
+        </a>
+
+
+        <a
+          routerLink="/dentists"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">+</span>
+
+          Dentists
+        </a>
+
+
+        <a
+          routerLink="/services-management"
+          routerLinkActive="active"
+          class="nav-item"
+        >
+          <span class="nav-icon">◇</span>
+
+          Services
+        </a>
+
+      </nav>
+
+    </div>
+
+
+    <div class="sidebar-footer">
+
+      <div class="staff-label">
+        STAFF PORTAL
+      </div>
+
+      <button
+        type="button"
+        class="logout-button"
+        (click)="logout()"
+      >
+        Logout
+      </button>
+
+    </div>
+
+  </aside>
+
+
+  <!-- Angular places the selected staff page here -->
+  <main class="staff-content">
+
+    <router-outlet>
+    </router-outlet>
+
+  </main>
+
+</div>
