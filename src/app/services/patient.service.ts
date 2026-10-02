@@ -28,7 +28,23 @@ export class PatientService {
       `${this.apiUrl}/${id}`
     );
   }
-  
+
+  updatePatient(
+    id: number,
+    patient: {
+      firstName: string;
+      lastName: string;
+      email: string;
+      phone: string;
+    }
+  ): Observable<Patient> {
+
+    return this.http.put<Patient>(
+      `${this.apiUrl}/${id}`,
+      patient
+    );
+  }
+
   createPatient(patient: {
     firstName: string;
     lastName: string;
@@ -41,5 +57,5 @@ export class PatientService {
       patient
     );
   }
-  
+
 }

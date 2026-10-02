@@ -1,110 +1,151 @@
 <section class="hero" id="home">
 
-  <!-- LEFT SIDE -->
-  <div class="hero-content">
+  <div class="hero-container">
 
-    <div class="hero-label">
-      <span></span>
-      DENTAL CARE IN AUCKLAND
-    </div>
+    <!-- LEFT: PATIENT INFORMATION -->
+    <div class="hero-content">
 
-    <h1>
-      Healthy smiles.
-      <br>
-      Brighter tomorrows.
-    </h1>
+      <div class="hero-label">
+        <span class="label-line"></span>
+        DENTAL CARE IN AUCKLAND
+      </div>
 
-    <p class="hero-description">
-      General, cosmetic and preventive dental care in a
-      modern, comfortable clinic. We're here to help you
-      and your family smile with confidence.
-    </p>
+      <h1>
+        Dental care for
+        <br>
+        you and your family.
+      </h1>
 
-    <div class="hero-buttons">
-
-      <button class="primary-button">
-
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M7 2v3M17 2v3M3 9h18M5 4h14
-            a2 2 0 0 1 2 2v13
-            a2 2 0 0 1-2 2H5
-            a2 2 0 0 1-2-2V6
-            a2 2 0 0 1 2-2Z"
-          />
-        </svg>
-
-        Book an Appointment
-
-      </button>
-
-      <a href="#services" class="secondary-button">
-        View Our Services
-      </a>
-
-    </div>
+      <p class="hero-description">
+        General, preventive and cosmetic dental care in a modern,
+        comfortable clinic. Our team is here to make every visit
+        clear, calm and straightforward.
+      </p>
 
 
-    <!-- TRUST ITEMS -->
-    <div class="hero-features">
+      <!-- ACTIONS -->
+      <div class="hero-buttons">
 
-      <div class="feature">
+        <button
+          class="primary-button" routerLink="/book"
+          type="button"
+        >
 
-        <div class="feature-icon">
-          ✓
-        </div>
+          <svg
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              d="M7 2v3M17 2v3M3 9h18M5 4h14
+                 a2 2 0 0 1 2 2v13
+                 a2 2 0 0 1-2 2H5
+                 a2 2 0 0 1-2-2V6
+                 a2 2 0 0 1 2-2Z"
+            />
+          </svg>
 
-        <div>
-          <strong>Quality care</strong>
-          <span>Modern equipment</span>
-        </div>
+          Book an Appointment
+
+        </button>
+
+
+        <a
+          routerLink="/services"
+          class="secondary-button"
+        >
+          View our services
+          <span aria-hidden="true">→</span>
+        </a>
 
       </div>
 
 
-      <div class="feature">
+      <!-- PATIENT INFORMATION -->
+      <div class="patient-info">
 
-        <div class="feature-icon">
-          ★
+        <div class="info-item">
+
+          <span class="info-label">
+            NEW PATIENTS
+          </span>
+
+          <strong>
+            Welcome
+          </strong>
+
+          <small>
+            Bookings available
+          </small>
+
         </div>
 
-        <div>
-          <strong>Experienced team</strong>
-          <span>Patient focused</span>
+
+        <div class="info-item">
+
+          <span class="info-label">
+            OPENING HOURS
+          </span>
+
+          <strong>
+            Mon – Fri
+          </strong>
+
+          <small>
+            9:00 AM – 5:00 PM
+          </small>
+
         </div>
 
-      </div>
 
+        <div class="info-item">
 
-      <div class="feature">
+          <span class="info-label">
+            NEED HELP?
+          </span>
 
-        <div class="feature-icon">
-          ⌖
-        </div>
+          <strong>
+            <a routerLink="/contact">Contact our clinic</a>
+          </strong>
 
-        <div>
-          <strong>Convenient location</strong>
-          <span>Auckland, New Zealand</span>
+          <small>
+            Our team can assist
+          </small>
+
         </div>
 
       </div>
 
     </div>
 
-  </div>
+
+    <!-- RIGHT: CLINIC IMAGE -->
+    <div class="hero-image">
+
+      <img
+        src="assets/images/clinic-hero.png"
+        alt="Modern dental clinic in Auckland"
+      >
 
 
-  <!-- RIGHT SIDE -->
-  <div class="hero-image">
+      <!-- AVAILABILITY -->
+      <div class="availability-card">
 
-    <img
-      src="assets/images/clinic-hero.png"
-      alt="Modern dental clinic in Auckland"
-    >
+        <span class="status-dot"></span>
 
-    <div class="image-message">
-      <span>A HEALTHIER SMILE</span>
-      <strong>A BRIGHTER YOU</strong>
+        <div>
+
+          <strong>
+            Accepting new patients
+          </strong>
+
+          <span>
+            Book your visit today
+          </span>
+
+        </div>
+
+      </div>
+
     </div>
 
   </div>

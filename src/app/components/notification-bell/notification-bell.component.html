@@ -1,0 +1,21 @@
+<aside class="notification-widget" *ngIf="signedIn" aria-label="Patient notifications">
+  <section class="notification-panel" *ngIf="panelOpen" id="patient-notification-panel" aria-labelledby="notification-heading">
+    <header><div><span class="eyebrow">YOUR CLINIC UPDATES</span><h2 id="notification-heading">Notifications <span class="count" *ngIf="unreadCount">{{ unreadCount }}</span></h2></div>
+      <button class="close" type="button" (click)="panelOpen = false" aria-label="Close notifications">&times;</button></header>
+    <p class="muted">Updates stay here. Open a notification to mark it read.</p>
+    <div class="notification-list"><button class="notification-item" type="button" *ngFor="let notification of notifications" [class.unread]="!notification.readAt"
+      [disabled]="openingId !== null" (click)="open(notification)">
+      <span class="dot" *ngIf="!notification.readAt" aria-label="Unread"></span><span><strong>Your appointment is confirmed</strong><span>Booking #{{ notification.appointmentId }} · Tap to view your appointment</span><small>{{ notification.createdAt | date:'medium' }}</small></span>
+    </button><p class="empty" *ngIf="!notifications.length">No updates yet. We’ll let you know when your booking is confirmed.</p></div>
+    <footer><button type="button" class="sound" (click)="toggleSound()" [attr.aria-pressed]="soundEnabled">{{ soundEnabled ? 'Sound on · turn off' : 'Enable notification sound' }}</button><a routerLink="/patient-notifications" (click)="panelOpen = false">View all</a></footer>
+  </section>
+  <button class="notification-toast" type="button" *ngIf="latestUnread as latest" [hidden]="panelOpen" (click)="open(latest)" [disabled]="openingId !== null">
+    <span class="toast-icon" aria-hidden="true">✓</span><span><strong>You have a notification</strong><span>Your appointment is confirmed. Tap to view.</span></span>
+  </button>
+  <div class="widget-controls"><button type="button" class="enable-sound" *ngIf="!soundEnabled && !panelOpen" (click)="toggleSound()">Enable sound</button>
+    <button type="button" class="bell" (click)="panelOpen = !panelOpen" [attr.aria-expanded]="panelOpen" aria-controls="patient-notification-panel" [attr.aria-label]="'Notifications: ' + unreadCount + ' unread'">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></svg>
+      <span class="count bell-count" *ngIf="unreadCount" aria-live="polite">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+    </button></div>
+  <small class="connection-error" role="status" *ngIf="errorMessage">{{ errorMessage }}</small>
+</aside>

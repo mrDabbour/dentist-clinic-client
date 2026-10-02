@@ -27,7 +27,7 @@
 
         <a
           routerLink="/dashboard"
-          routerLinkActive="active"
+          routerLinkActive="active" ariaCurrentWhenActive="page"
           class="nav-item"
         >
           <span class="nav-icon">⌂</span>
@@ -38,7 +38,7 @@
 
         <a
           routerLink="/appointments"
-          routerLinkActive="active"
+          routerLinkActive="active" ariaCurrentWhenActive="page"
           class="nav-item"
         >
           <span class="nav-icon">▣</span>
@@ -49,7 +49,7 @@
 
         <a
           routerLink="/patients"
-          routerLinkActive="active"
+          routerLinkActive="active" ariaCurrentWhenActive="page"
           class="nav-item"
         >
           <span class="nav-icon">♙</span>
@@ -60,7 +60,7 @@
 
         <a
           routerLink="/dentists"
-          routerLinkActive="active"
+          routerLinkActive="active" ariaCurrentWhenActive="page"
           class="nav-item"
         >
           <span class="nav-icon">+</span>
@@ -71,7 +71,7 @@
 
         <a
           routerLink="/services-management"
-          routerLinkActive="active"
+          routerLinkActive="active" ariaCurrentWhenActive="page"
           class="nav-item"
         >
           <span class="nav-icon">◇</span>
@@ -79,6 +79,7 @@
           Services
         </a>
 
+        <a *ngIf="canViewBilling" routerLink="/billing" routerLinkActive="active" ariaCurrentWhenActive="page" class="nav-item"><span class="nav-icon">$</span>Invoices &amp; payments</a>
       </nav>
 
     </div>
@@ -104,7 +105,9 @@
 
 
   <!-- Angular places the selected staff page here -->
-  <main class="staff-content">
+  <main class="staff-content" [attr.aria-busy]="isNavigating">
+    <div class="app-context-bar"><nav aria-label="Breadcrumb"><a routerLink="/dashboard">Workspace</a><span aria-hidden="true">/</span><strong>{{ currentApp }}</strong></nav><a class="back-workspace" routerLink="/dashboard" *ngIf="currentApp !== 'Dashboard'">&larr; All apps</a><span class="workspace-state" *ngIf="currentApp === 'Dashboard'">Clinic workspace</span></div>
+    <div class="route-progress" *ngIf="isNavigating" role="status" aria-label="Opening app"></div>
 
     <router-outlet>
     </router-outlet>

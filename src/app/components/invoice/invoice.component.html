@@ -1,0 +1,47 @@
+<main class="invoice-page">
+  <div class="page-actions"><a routerLink="/my-appointments">&larr; My appointments</a><button type="button" class="secondary" (click)="print()" [disabled]="!data">Print / save PDF</button></div>
+  <p role="status" *ngIf="isLoading">Loading your invoice...</p>
+  <div class="error" role="alert" *ngIf="errorMessage">{{ errorMessage }} <button type="button" class="text-button" *ngIf="!billingSetupRequired" (click)="load()" [disabled]="isPaying">Try again</button></div>
+  <p class="notice" role="status" *ngIf="message">{{ message }}</p>
+  <ng-container *ngIf="data as bill">
+    <section class="invoice-sheet" aria-labelledby="invoice-title">
+      <header class="invoice-heading"><div><span class="eyebrow">{{ bill.invoice.supplierName }}</span><h1 id="invoice-title">{{ bill.invoice.paymentStatus === 'Paid' ? 'Payment receipt' : bill.invoice.gstRegistered ? (bill.invoice.supplierGstNumber ? 'Tax invoice' : 'Payment request') : 'Invoice' }}</h1>
+        <p *ngIf="bill.invoice.supplierAddress">{{ bill.invoice.supplierAddress }}</p><p *ngIf="bill.invoice.gstRegistered && bill.invoice.supplierGstNumber">GST number: {{ bill.invoice.supplierGstNumber }}</p></div>
+        <div class="invoice-number"><strong>{{ bill.invoice.number }}</strong><span>{{ bill.invoice.issuedAt | date:'mediumDate' }}</span>
+          <span class="status" [class.paid]="bill.invoice.paymentStatus === 'Paid'">{{ bill.invoice.paymentStatus === 'AwaitingVerification' ? 'Awaiting bank verification' : bill.invoice.paymentStatus }}</span></div>
+      </header>
+      <div class="bill-to"><span class="eyebrow">BILL TO</span><strong>{{ bill.invoice.customerName }}</strong><span>{{ bill.invoice.customerEmail }}</span><small>Appointment #{{ bill.invoice.appointmentId }}</small></div>
+      <table><thead><tr><th scope="col">Description</th><th scope="col">Quantity</th><th scope="col" class="amount">Price excluding GST</th></tr></thead>
+        <tbody><tr><td>{{ bill.invoice.description }}</td><td>1</td><td class="amount">{{ bill.invoice.subtotal | currency:bill.invoice.currency:'symbol-narrow' }}</td></tr></tbody></table>
+      <dl class="totals"><div><dt>Price excluding GST</dt><dd>{{ bill.invoice.subtotal | currency:bill.invoice.currency:'symbol-narrow' }}</dd></div>
+        <div *ngIf="bill.invoice.gstRegistered"><dt>GST ({{ bill.invoice.gstRate | percent }})</dt><dd>{{ bill.invoice.gstAmount | currency:bill.invoice.currency:'symbol-narrow' }}</dd></div>
+        <div class="total"><dt>{{ bill.invoice.paymentStatus === 'Paid' ? 'Total paid' : 'Total to pay' }} {{ bill.invoice.gstRegistered ? '(including GST)' : '' }}</dt><dd>{{ bill.invoice.total | currency:bill.invoice.currency:'symbol-narrow' }}</dd></div></dl>
+      <p class="notice" *ngIf="bill.invoice.gstRegistered && !bill.invoice.supplierGstNumber">This is a payment request. Please contact the clinic for a complete GST invoice.</p><p class="currency-note">All amounts are in {{ bill.invoice.currency }}. <span *ngIf="!bill.invoice.gstRegistered">GST is not charged.</span></p>
+      <p class="notice" *ngIf="bill.invoice.paymentStatus === 'Paid'">Paid via {{ bill.invoice.paymentMethod === 'PayPal' ? 'PayPal' : bill.invoice.paymentMethod === 'NoCharge' ? 'no payment required' : 'bank transfer' }}<span *ngIf="bill.invoice.paidAt"> on {{ bill.invoice.paidAt | date:'mediumDate' }}</span>.</p>
+    </section>
+    <section class="payment-section paypal-link-test" aria-labelledby="paypal-test-heading">
+      <article class="payment-card">
+        <span class="eyebrow">LIVE PAYMENT TEST</span>
+        <h2 id="paypal-test-heading">Try a NZ$0.50 PayPal payment</h2>
+        <p>This is a separate test payment. It does not pay your appointment invoice or change its payment status. Check the total on PayPal before paying.</p>
+        <a class="paypal-button paypal-link" href="https://www.paypal.com/ncp/payment/JK7DHPJRCTTVN" target="_blank" rel="noopener noreferrer" aria-describedby="paypal-test-help">Open PayPal test payment <span aria-hidden="true">&#8599;</span></a>
+        <p id="paypal-test-help" class="muted">Opens PayPal in a new tab. This uses real money and PayPal processing fees apply. Keep your PayPal transaction ID if you need to contact the clinic.</p>
+      </article>
+    </section>
+    <section class="payment-section" *ngIf="bill.invoice.paymentStatus !== 'Paid' && bill.canPay" aria-labelledby="payment-heading">
+      <h2 id="payment-heading">Choose how to pay</h2><p>Your appointment is confirmed. Please arrange payment using one of the options below.</p>
+      <div class="payment-options" [style.grid-template-columns]="bill.payPalAvailable ? null : '1fr'">
+        <article class="payment-card" *ngIf="bill.payPalAvailable"><span class="eyebrow">ONLINE PAYMENT</span><h3>PayPal</h3><p>Continue to PayPal to approve your payment securely.</p>
+          <button type="button" class="paypal-button" (click)="payWithPayPal()" [disabled]="isPaying || !bill.payPalAvailable || bill.invoice.paymentStatus !== 'Unpaid'">{{ isPaying ? 'Please wait...' : 'Pay with PayPal' }}</button>
+          <p class="muted" *ngIf="!bill.payPalAvailable">Online payment is currently unavailable. You can use bank transfer.</p></article>
+        <article class="payment-card"><span class="eyebrow">BANK TRANSFER</span><h3>Pay from your bank</h3>
+          <dl class="bank-details"><div><dt>Account holder</dt><dd>{{ bill.bankAccountName }}</dd></div><div><dt>Account number</dt><dd>{{ bill.bankAccountNumber }}</dd></div><div><dt>Payment reference</dt><dd>{{ bill.invoice.number }}</dd></div><div><dt>Amount</dt><dd>{{ bill.invoice.total | currency:bill.invoice.currency:'symbol-narrow' }}</dd></div></dl>
+          <p>Use the invoice number as your transfer reference. After transferring, let the clinic know below.</p>
+          <label for="bank-reference">Reference used</label><input id="bank-reference" [(ngModel)]="bankReference" maxlength="100" [disabled]="isPaying || bill.invoice.paymentStatus !== 'Unpaid'">
+          <button type="button" class="primary" (click)="reportTransfer()" [disabled]="isPaying || !bankReference.trim() || bill.invoice.paymentStatus !== 'Unpaid'">I have made the transfer</button>
+          <p class="notice" *ngIf="bill.invoice.paymentStatus === 'AwaitingVerification'">Awaiting verification. The clinic will mark your invoice paid after checking the bank deposit.</p></article>
+      </div>
+    </section>
+    <p class="notice" *ngIf="!bill.canPay && bill.invoice.paymentStatus !== 'Paid'">Payment is unavailable for this appointment. Please contact the clinic.</p>
+  </ng-container>
+</main>

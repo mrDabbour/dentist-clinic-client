@@ -1,0 +1,22 @@
+<main class="patient-login">
+  <a class="back-link" routerLink="/">&larr; Back to the clinic</a>
+  <section class="login-card" aria-labelledby="login-title" [attr.aria-busy]="isLoading || isPreparing">
+    <div class="clinic-mark" aria-hidden="true">+</div>
+    <p class="eyebrow">PATIENT PORTAL</p>
+    <h1 id="login-title">Welcome to your clinic</h1>
+    <p class="subtitle">Sign in with Google to continue to appointment booking.</p>
+    <div class="google-area" [class.busy]="isLoading" [attr.inert]="isLoading ? '' : null">
+      <div #googleButton id="google-signin-button"></div>
+    </div>
+    <p class="status" role="status" aria-live="polite" *ngIf="isPreparing || isLoading">
+      {{ isLoading ? 'Signing you in...' : 'Preparing secure sign-in...' }}
+    </p>
+    <div class="error" role="alert" *ngIf="errorMessage">
+      <p>{{ errorMessage }}</p>
+      <button type="button" (click)="retry()" [disabled]="isLoading || isPreparing">Try again</button>
+    </div>
+    <p class="privacy-note">We use your Google name and email to create or find your patient profile.
+      You may be asked for a contact number before booking.</p>
+    <div class="staff-link">Work at the clinic? <a routerLink="/login">Staff sign-in</a></div>
+  </section>
+</main>

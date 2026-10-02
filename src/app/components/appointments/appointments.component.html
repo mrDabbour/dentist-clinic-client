@@ -4,104 +4,202 @@
        PAGE HEADER
   ====================================== -->
   <header class="page-header">
-    <div>
-      <p class="page-label">CLINIC MANAGEMENT</p>
 
-      <h1>Appointments</h1>
+    <div>
+
+      <span class="page-label">
+        CLINIC MANAGEMENT
+      </span>
+
+      <h1>
+        Appointments
+      </h1>
 
       <p class="page-description">
-        Manage and review clinic appointments.
+        Manage patient bookings, clinicians and treatment schedules.
       </p>
-    </div>
-  </header>
 
-
-  <!-- =====================================
-       TOOLBAR
-  ====================================== -->
-  <div class="appointments-toolbar">
-
-    <!-- Search -->
-    <div class="search-box">
-      <span class="search-icon">⌕</span>
-
-      <input
-        type="text"
-        [(ngModel)]="searchTerm"
-        placeholder="Search patient, dentist or service..."
-      />
     </div>
 
 
-    <!-- Status Filter -->
-    <div class="status-filter">
-      <select [(ngModel)]="selectedStatus">
-
-        <option value="All">
-          All statuses
-        </option>
-
-        <option value="Pending">
-          Pending
-        </option>
-
-        <option value="Confirmed">
-          Confirmed
-        </option>
-
-        <option value="Completed">
-          Completed
-        </option>
-
-        <option value="Cancelled">
-          Cancelled
-        </option>
-
-        <option value="NoShow">
-          No Show
-        </option>
-
-      </select>
-    </div>
-
-
-    <!-- New Appointment Button -->
     <button
       type="button"
       class="new-appointment-button"
       (click)="openNewAppointmentForm()"
     >
-      + New Appointment
+      <span class="button-plus">
+        +
+      </span>
+
+      New Appointment
     </button>
 
-  </div>
+  </header>
+
+
+  <!-- =====================================
+       APPOINTMENT SUMMARY
+  ====================================== -->
+  <section class="appointment-summary">
+
+
+    <!-- Total -->
+    <div class="summary-item">
+
+      <div class="summary-icon">
+        ▣
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Total Appointments
+        </span>
+
+        <strong>
+          {{ appointments.length }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-divider"></div>
+
+
+    <!-- Pending -->
+    <div class="summary-item">
+
+      <div
+        class="
+          summary-icon
+          pending-icon
+        "
+      >
+        ◷
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Pending
+        </span>
+
+        <strong>
+          {{ getStatusCount("Pending") }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-divider"></div>
+
+
+    <!-- Confirmed -->
+    <div class="summary-item">
+
+      <div
+        class="
+          summary-icon
+          confirmed-icon
+        "
+      >
+        ✓
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Confirmed
+        </span>
+
+        <strong>
+          {{ getStatusCount("Confirmed") }}
+        </strong>
+
+      </div>
+
+    </div>
+
+
+    <div class="summary-divider"></div>
+
+
+    <!-- Completed -->
+    <div class="summary-item">
+
+      <div
+        class="
+          summary-icon
+          completed-icon
+        "
+      >
+        ✓
+      </div>
+
+      <div class="summary-content">
+
+        <span>
+          Completed
+        </span>
+
+        <strong>
+          {{ getStatusCount("Completed") }}
+        </strong>
+
+      </div>
+
+    </div>
+
+  </section>
 
 
   <!-- =====================================
        NEW APPOINTMENT FORM
   ====================================== -->
-  <div
+  <section
     class="new-appointment-panel"
     *ngIf="showNewAppointmentForm"
   >
 
+
     <!-- Form Header -->
     <div class="form-header">
 
-      <div>
-        <p class="page-label">
-          NEW BOOKING
-        </p>
+      <div class="form-title">
 
-        <h2>
-          New Appointment
-        </h2>
+        <div class="form-title-icon">
+          +
+        </div>
+
+
+        <div>
+
+          <span class="page-label">
+            NEW BOOKING
+          </span>
+
+          <h2>
+            Create Appointment
+          </h2>
+
+          <p>
+            Schedule a patient with the appropriate
+            clinician and dental service.
+          </p>
+
+        </div>
+
       </div>
 
 
       <button
         type="button"
         class="close-button"
+        aria-label="Close appointment form"
         (click)="closeNewAppointmentForm()"
       >
         ×
@@ -110,15 +208,31 @@
     </div>
 
 
-    <!-- Form Fields -->
+    <!-- Form Section -->
+    <div class="form-section-label">
+      APPOINTMENT DETAILS
+    </div>
+
+
+    <!-- =====================================
+         FORM GRID
+    ====================================== -->
     <div class="form-grid">
+
 
       <!-- Patient -->
       <div class="form-field">
 
         <label for="patient">
+
           Patient
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <select
           id="patient"
@@ -126,18 +240,26 @@
         >
 
           <option [ngValue]="null">
-            Select a patient
+            Select patient
           </option>
+
 
           <option
             *ngFor="let patient of patients"
             [ngValue]="patient.id"
           >
+
             {{ patient.firstName }}
             {{ patient.lastName }}
+
           </option>
 
         </select>
+
+
+        <small>
+          Patient receiving treatment
+        </small>
 
       </div>
 
@@ -146,8 +268,15 @@
       <div class="form-field">
 
         <label for="dentist">
-          Dentist
+
+          Clinician
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <select
           id="dentist"
@@ -155,18 +284,26 @@
         >
 
           <option [ngValue]="null">
-            Select a dentist
+            Select dentist
           </option>
+
 
           <option
             *ngFor="let dentist of dentists"
             [ngValue]="dentist.id"
           >
+
             Dr {{ dentist.firstName }}
             {{ dentist.lastName }}
+
           </option>
 
         </select>
+
+
+        <small>
+          Dentist responsible for this visit
+        </small>
 
       </div>
 
@@ -175,8 +312,15 @@
       <div class="form-field">
 
         <label for="dentalService">
-          Service
+
+          Treatment / Service
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <select
           id="dentalService"
@@ -184,17 +328,28 @@
         >
 
           <option [ngValue]="null">
-            Select a service
+            Select service
           </option>
 
+
           <option
-            *ngFor="let service of dentalServices"
+            *ngFor="
+              let service
+              of dentalServices
+            "
             [ngValue]="service.id"
           >
+
             {{ service.name }}
+
           </option>
 
         </select>
+
+
+        <small>
+          Requested dental treatment
+        </small>
 
       </div>
 
@@ -203,14 +358,26 @@
       <div class="form-field">
 
         <label for="appointmentDate">
-          Date
+
+          Appointment Date
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <input
           id="appointmentDate"
           type="date"
           [(ngModel)]="appointmentDate"
         />
+
+
+        <small>
+          Scheduled treatment date
+        </small>
 
       </div>
 
@@ -219,8 +386,15 @@
       <div class="form-field">
 
         <label for="appointmentTime">
-          Time
+
+          Start Time
+
+          <span class="required">
+            *
+          </span>
+
         </label>
+
 
         <input
           id="appointmentTime"
@@ -228,43 +402,70 @@
           [(ngModel)]="appointmentTime"
         />
 
+
+        <small>
+          Appointment start time
+        </small>
+
       </div>
 
 
       <!-- Notes -->
-      <div class="form-field">
+      <div
+        class="
+          form-field
+          notes-field
+        "
+      >
 
         <label for="appointmentNotes">
-          Notes
+          Booking Notes
         </label>
+
 
         <textarea
           id="appointmentNotes"
           [(ngModel)]="appointmentNotes"
           rows="3"
-          placeholder="Optional appointment notes"
+          placeholder="Add optional notes for clinic staff..."
         ></textarea>
+
+
+        <small>
+          Optional internal appointment information
+        </small>
 
       </div>
 
     </div>
 
 
-    <!-- Form Error -->
-    <p
+    <!-- =====================================
+         FORM ERROR
+    ====================================== -->
+    <div
       class="form-error"
       *ngIf="formErrorMessage"
     >
+
+      <span>
+        !
+      </span>
+
       {{ formErrorMessage }}
-    </p>
+
+    </div>
 
 
-    <!-- Form Actions -->
+    <!-- =====================================
+         FORM ACTIONS
+    ====================================== -->
     <div class="form-actions">
 
       <button
         type="button"
         class="form-cancel-button"
+        [disabled]="creatingAppointment"
         (click)="closeNewAppointmentForm()"
       >
         Cancel
@@ -277,124 +478,346 @@
         [disabled]="creatingAppointment"
         (click)="createAppointment()"
       >
+
         {{
           creatingAppointment
-            ? "Creating..."
+            ? "Creating appointment..."
             : "Create Appointment"
         }}
+
       </button>
 
     </div>
 
-  </div>
+  </section>
 
 
   <!-- =====================================
-       LOADING
+       APPOINTMENTS CONTENT
   ====================================== -->
-  <p *ngIf="loading">
-    Loading appointments...
-  </p>
+  <section class="appointments-content">
 
 
-  <!-- =====================================
-       ERROR
-  ====================================== -->
-  <p *ngIf="errorMessage">
-    {{ errorMessage }}
-  </p>
+    <!-- =====================================
+         TOOLBAR
+    ====================================== -->
+    <div class="appointments-toolbar">
 
 
-  <!-- =====================================
-       TABLE HEADINGS
-  ====================================== -->
-  <div
-    class="table-heading"
-    *ngIf="!loading && appointments.length > 0"
-  >
-
-    <span>
-      Patient / Service
-    </span>
-
-    <span>
-      Dentist
-    </span>
-
-    <span>
-      Date
-    </span>
-
-    <span>
-      Time
-    </span>
-
-    <span>
-      Status
-    </span>
-
-  </div>
+      <div class="toolbar-left">
 
 
-  <!-- =====================================
-       APPOINTMENTS
-  ====================================== -->
-  <div
-    class="appointment-row"
-    *ngFor="let appointment of filteredAppointments"
-  >
+        <!-- Search -->
+        <div class="search-box">
 
-    <!-- Patient / Service -->
-    <div>
+          <span class="search-icon">
+            ⌕
+          </span>
 
-      <strong>
-        {{ appointment.patientName }}
-      </strong>
+
+          <input
+            type="text"
+            [(ngModel)]="searchTerm"
+            placeholder="Search patient, dentist or treatment..."
+          />
+
+        </div>
+
+
+        <!-- Filter -->
+        <div class="status-filter">
+
+          <select
+            [(ngModel)]="selectedStatus"
+          >
+
+            <option value="All">
+              All statuses
+            </option>
+
+            <option value="Pending">
+              Pending
+            </option>
+
+            <option value="Confirmed">
+              Confirmed
+            </option>
+
+            <option value="Completed">
+              Completed
+            </option>
+
+            <option value="Cancelled">
+              Cancelled
+            </option>
+
+            <option value="NoShow">
+              No Show
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <!-- Results -->
+      <div class="result-count">
+
+        <strong>
+          {{ filteredAppointments.length }}
+        </strong>
+
+        appointments
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         LOADING
+    ====================================== -->
+    <div
+      class="state-card"
+      *ngIf="loading"
+    >
+
+      Loading clinic schedule...
+
+    </div>
+
+
+    <!-- =====================================
+         ERROR
+    ====================================== -->
+    <div
+      class="
+        state-card
+        error-state
+      "
+      *ngIf="errorMessage"
+    >
+
+      {{ errorMessage }}
+
+    </div>
+
+
+    <!-- =====================================
+         APPOINTMENTS TABLE
+    ====================================== -->
+    <div
+      class="appointments-table"
+      *ngIf="
+        !loading &&
+        !errorMessage &&
+        filteredAppointments.length > 0
+      "
+    >
+
+
+      <!-- Table Heading -->
+      <div class="table-heading">
+
+        <span>
+          Patient / Treatment
+        </span>
+
+        <span>
+          Clinician
+        </span>
+
+        <span>
+          Appointment
+        </span>
+
+        <span>
+          Time
+        </span>
+
+        <span>
+          Status
+        </span>
+
+      </div>
+
+
+      <!-- =====================================
+           APPOINTMENT ROW
+      ====================================== -->
+      <div
+        class="appointment-row"
+        *ngFor="
+          let appointment
+          of filteredAppointments
+        "
+      >
+
+
+        <!-- Patient -->
+        <div class="patient-column">
+
+
+          <div class="patient-avatar">
+
+            {{
+              appointment.patientName
+                ? appointment.patientName.charAt(0)
+                : "P"
+            }}
+
+          </div>
+
+
+          <div class="patient-copy">
+
+            <strong>
+              {{ appointment.patientName }}
+            </strong>
+
+
+            <p>
+              {{ appointment.dentalServiceName }}
+            </p>
+
+
+            <span class="record-id">
+              Appointment #{{ appointment.id }}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <!-- Dentist -->
+        <div class="dentist-column">
+
+          <span class="column-label">
+            Clinician
+          </span>
+
+          <strong>
+            Dr {{ appointment.dentistName }}
+          </strong>
+
+        </div>
+
+
+        <!-- Date -->
+        <div class="date-column">
+
+          <span class="column-label">
+            Date
+          </span>
+
+          <strong>
+
+            {{
+              appointment.startTime
+                | date: "mediumDate"
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- Time -->
+        <div class="time-column">
+
+          <span class="column-label">
+            Start
+          </span>
+
+          <strong>
+
+            {{
+              appointment.startTime
+                | date: "shortTime"
+            }}
+
+          </strong>
+
+        </div>
+
+
+        <!-- Status -->
+        <div class="status-column">
+
+          <span
+            class="status-badge"
+
+            [class.status-pending]="
+              appointment.status === 'Pending'
+            "
+
+            [class.status-confirmed]="
+              appointment.status === 'Confirmed'
+            "
+
+            [class.status-completed]="
+              appointment.status === 'Completed'
+            "
+
+            [class.status-cancelled]="
+              appointment.status === 'Cancelled'
+            "
+
+            [class.status-noshow]="
+              appointment.status === 'NoShow'
+            "
+          >
+
+            <span class="status-dot">
+            </span>
+
+
+            {{
+              appointment.status === "NoShow"
+                ? "No Show"
+                : appointment.status
+            }}
+
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- =====================================
+         EMPTY STATE
+    ====================================== -->
+    <div
+      class="empty-state"
+      *ngIf="
+        !loading &&
+        !errorMessage &&
+        filteredAppointments.length === 0
+      "
+    >
+
+      <div class="empty-icon">
+        ▣
+      </div>
+
+
+      <h3>
+        No appointments found
+      </h3>
+
 
       <p>
-        {{ appointment.dentalServiceName }}
+        Try changing your search or status filter.
       </p>
 
     </div>
 
-
-    <!-- Dentist -->
-    <div>
-      Dr {{ appointment.dentistName }}
-    </div>
-
-
-    <!-- Date -->
-    <div>
-      {{ appointment.startTime | date: "mediumDate" }}
-    </div>
-
-
-    <!-- Time -->
-    <div>
-      {{ appointment.startTime | date: "shortTime" }}
-    </div>
-
-
-    <!-- Status -->
-    <div>
-      {{ appointment.status }}
-    </div>
-
-  </div>
-
-
-  <!-- =====================================
-       EMPTY STATE
-  ====================================== -->
-  <p
-    *ngIf="
-      !loading &&
-      !errorMessage &&
-      filteredAppointments.length === 0
-    "
-  >
-    No appointments found.
-  </p>
+  </section>
 
 </div>

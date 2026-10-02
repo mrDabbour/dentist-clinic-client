@@ -1,0 +1,26 @@
+<div class="profile-page">
+  <div class="profile-card" [attr.aria-busy]="isLoading">
+    <div class="icon" aria-hidden="true">+</div>
+    <h1>Complete your profile</h1>
+    <p class="subtitle">We just need your contact number before you book.</p>
+    <div class="field">
+      <label for="patient-name">Name</label>
+      <input id="patient-name" type="text" [value]="firstName + ' ' + lastName" disabled>
+    </div>
+    <div class="field">
+      <label for="patient-email">Email</label>
+      <input id="patient-email" type="email" [value]="email" disabled>
+    </div>
+    <div class="field">
+      <label for="patient-phone">Phone number</label>
+      <input id="patient-phone" type="tel" [(ngModel)]="phone" autocomplete="tel"
+        maxlength="30" [disabled]="isLoading" placeholder="e.g. 021 123 4567">
+    </div>
+    <p class="error" role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+    <button type="button" (click)="continue()" [disabled]="isLoading">
+      {{ isLoading ? 'Please wait...' : 'Continue to booking' }}
+    </button>
+    <p><button class="sign-out-button" type="button" (click)="signOut()" [disabled]="isLoading">Sign out</button></p>
+  </div>
+</div>
+

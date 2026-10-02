@@ -3,7 +3,7 @@
     <!-- =========================
          LOGO
     ========================== -->
-    <a class="brand" href="#home">
+    <a class="brand" routerLink="/" fragment="home">
       <div class="tooth-logo">
         <svg viewBox="0 0 64 72" aria-hidden="true">
           <path
@@ -31,22 +31,24 @@
     <!-- =========================
          NAVIGATION
     ========================== -->
-    <div class="nav-links">
-      <a href="#home" class="active"> Home </a>
+    <div class="nav-links" id="public-menu" [class.mobile-open]="menuOpen">
+      <a routerLink="/" fragment="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" ariaCurrentWhenActive="page"> Home </a>
 
-      <a href="#services"> Services </a>
+      <a *ngIf="patientAuth.getToken()" routerLink="/my-appointments" routerLinkActive="active" (click)="menuOpen = false">My appointments</a>
+      <a routerLink="/services" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="menuOpen = false"> Services </a>
 
-      <a href="#dentists"> Our Team </a>
+      <a routerLink="/team" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="menuOpen = false"> Our Team </a>
 
-      <a href="#about"> About </a>
+      <a routerLink="/about" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="menuOpen = false"> About </a>
 
-      <a href="#contact"> Contact </a>
+      <a routerLink="/contact" routerLinkActive="active" ariaCurrentWhenActive="page" (click)="menuOpen = false"> Contact </a>
     </div>
 
     <!-- =========================
          BOOK APPOINTMENT
     ========================== -->
-    <button class="book-button">
+    <button class="menu-toggle" type="button" (click)="menuOpen = !menuOpen" [attr.aria-expanded]="menuOpen" aria-controls="public-menu" aria-label="Toggle navigation"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+    <button class="book-button" type="button" routerLink="/book" (click)="menuOpen = false">
       <!-- Calendar Icon -->
       <svg class="calendar-icon" viewBox="0 0 24 24" aria-hidden="true">
         <path

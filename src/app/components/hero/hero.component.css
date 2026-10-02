@@ -1,245 +1,224 @@
-/* ========================================
-   HERO
-======================================== */
-
 .hero {
-    min-height: 640px;
+    padding: 54px 32px 64px;
+    background: #f5f9fa;
+    color: #17354d;
+}
+
+.hero-container {
+    width: min(1180px, 100%);
+    margin: 0 auto;
 
     display: grid;
-    grid-template-columns: 1fr 1fr;
-
-    background: #fffaf0;
+    grid-template-columns: minmax(0, 1.02fr) minmax(420px, 0.98fr);
+    align-items: stretch;
 
     overflow: hidden;
+
+    background: #ffffff;
+    border: 1px solid #dce9ec;
+    border-radius: 18px;
+
+    box-shadow: 0 12px 34px rgba(22, 50, 74, 0.06);
 }
 
 
 /* ========================================
-   LEFT CONTENT
+   CONTENT
 ======================================== */
 
 .hero-content {
-    padding:
-        95px 70px 70px max(70px, calc((100vw - 1200px) / 2));
+    padding: 64px 58px 48px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-
-/* Small heading */
-
 .hero-label {
     display: flex;
     align-items: center;
+    gap: 11px;
 
-    gap: 13px;
-
-    color: #64748b;
+    color: #087f8c;
 
     font-size: 11px;
-    font-weight: 700;
-
-    letter-spacing: 2.3px;
+    font-weight: 800;
+    letter-spacing: 1.5px;
 }
 
-
-.hero-label span {
-    width: 35px;
+.label-line {
+    width: 28px;
     height: 2px;
 
-    background: #e6bd56;
+    background: #25a9ad;
+    border-radius: 999px;
 }
-
-
-/* Main heading */
 
 h1 {
-    margin:
-        25px 0 24px;
+    max-width: 620px;
 
-    color: #0f2d54;
+    margin: 22px 0 20px;
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+    color: #16324a;
 
-    font-size: clamp(48px, 4.5vw, 72px);
-
-    font-weight: 500;
-
-    line-height: 1.04;
-
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(42px, 4.2vw, 62px);
+    font-weight: 700;
+    line-height: 1.06;
     letter-spacing: -2px;
 }
-
-
-/* Description */
 
 .hero-description {
     max-width: 590px;
 
     margin: 0;
 
-    color: #536174;
+    color: #647985;
 
-    font-size: 17px;
-
-    line-height: 1.8;
+    font-size: 16px;
+    line-height: 1.75;
 }
 
 
 /* ========================================
-   BUTTONS
+   ACTIONS
 ======================================== */
 
 .hero-buttons {
-    margin-top: 34px;
+    margin-top: 30px;
 
     display: flex;
     align-items: center;
-
-    gap: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
-
 
 .primary-button,
 .secondary-button {
-    min-height: 54px;
-
-    padding: 0 24px;
-
-    border-radius: 7px;
+    min-height: 46px;
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 9px;
 
-    gap: 11px;
+    padding: 0 18px;
 
-    font-size: 14px;
-    font-weight: 600;
+    border-radius: 8px;
 
-    cursor: pointer;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 750;
 
     text-decoration: none;
+    cursor: pointer;
 
-    transition: 0.2s ease;
+    transition:
+        background 160ms ease,
+        border-color 160ms ease,
+        color 160ms ease,
+        transform 160ms ease;
 }
-
-
-/* Primary */
 
 .primary-button {
-    border: 1px solid #0f2d54;
+    border: 1px solid #087f8c;
 
-    background: #0f2d54;
-
-    color: white;
+    background: #087f8c;
+    color: #ffffff;
 }
 
-
 .primary-button svg {
-    width: 18px;
-    height: 18px;
+    width: 17px;
+    height: 17px;
 
     fill: none;
-
     stroke: currentColor;
-
     stroke-width: 1.8;
-
     stroke-linecap: round;
     stroke-linejoin: round;
 }
 
-
 .primary-button:hover {
-    background: #173e6d;
-
+    background: #066f79;
+    border-color: #066f79;
     transform: translateY(-1px);
 }
 
-
-/* Secondary */
-
 .secondary-button {
-    border: 1px solid #0f2d54;
+    border: 1px solid #cfdddf;
 
-    background: transparent;
-
-    color: #0f2d54;
+    background: #ffffff;
+    color: #405d6b;
 }
 
-
 .secondary-button:hover {
-    background: #ffffff;
+    background: #f4f9fa;
+    border-color: #a9cdd0;
+    color: #087f8c;
 }
 
 
 /* ========================================
-   FEATURES
+   PATIENT INFORMATION
 ======================================== */
 
-.hero-features {
-    margin-top: 55px;
+.patient-info {
+    margin-top: 42px;
+    padding-top: 24px;
 
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 32px;
+    border-top: 1px solid #e6edef;
 }
 
+.info-item {
+    min-width: 0;
+    padding: 0 18px;
 
-.feature {
-    display: flex;
-    align-items: center;
-
-    gap: 11px;
+    border-right: 1px solid #e6edef;
 }
 
-
-.feature-icon {
-    width: 42px;
-    height: 42px;
-
-    flex-shrink: 0;
-
-    border-radius: 50%;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #fff1c9;
-
-    color: #a87b15;
-
-    font-size: 17px;
-    font-weight: 700;
+.info-item:first-child {
+    padding-left: 0;
 }
 
-
-.feature div:last-child {
-    display: flex;
-    flex-direction: column;
-
-    gap: 4px;
+.info-item:last-child {
+    padding-right: 0;
+    border-right: 0;
 }
 
+.info-label {
+    display: block;
 
-.feature strong {
-    color: #142d4c;
+    margin-bottom: 8px;
+
+    color: #84969f;
+
+    font-size: 9px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.info-item strong,
+.info-item small {
+    display: block;
+}
+
+.info-item strong {
+    margin-bottom: 4px;
+
+    color: #294b5d;
 
     font-size: 12px;
+    font-weight: 750;
 }
 
-
-.feature span {
-    color: #778397;
+.info-item small {
+    color: #82939b;
 
     font-size: 10px;
+    line-height: 1.4;
 }
 
 
@@ -248,85 +227,96 @@ h1 {
 ======================================== */
 
 .hero-image {
-    min-height: 640px;
-
     position: relative;
+
+    min-height: 590px;
 
     overflow: hidden;
 
-    background: #e9f1f8;
+    background: #eaf2f3;
 }
 
-
 .hero-image img {
+    position: absolute;
+    inset: 0;
+
     width: 100%;
     height: 100%;
 
-    position: absolute;
-
-    inset: 0;
-
     object-fit: cover;
-
     object-position: center;
 }
-
-
-/* subtle warm overlay */
 
 .hero-image::after {
     content: "";
 
     position: absolute;
-
     inset: 0;
 
     background:
-        linear-gradient(90deg,
-            rgba(255, 250, 240, 0.15),
-            transparent 35%);
+        linear-gradient(180deg,
+            transparent 58%,
+            rgba(16, 44, 57, 0.16) 100%);
 
     pointer-events: none;
 }
 
 
-/* Image text */
+/* ========================================
+   AVAILABILITY
+======================================== */
 
-.image-message {
+.availability-card {
     position: absolute;
-
     z-index: 2;
 
-    top: 70px;
-    left: 45px;
+    left: 24px;
+    bottom: 24px;
 
     display: flex;
+    align-items: center;
+    gap: 11px;
+
+    padding: 13px 16px;
+
+    background: rgba(255, 255, 255, 0.95);
+
+    border: 1px solid rgba(220, 233, 236, 0.9);
+    border-radius: 10px;
+
+    box-shadow: 0 8px 24px rgba(20, 55, 68, 0.12);
+
+    backdrop-filter: blur(6px);
+}
+
+.status-dot {
+    width: 9px;
+    height: 9px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: #36ae77;
+    box-shadow: 0 0 0 4px rgba(54, 174, 119, 0.12);
+}
+
+.availability-card div {
+    display: flex;
     flex-direction: column;
-
-    gap: 5px;
-
-    color: #0f2d54;
+    gap: 3px;
 }
 
+.availability-card strong {
+    color: #284b5b;
 
-.image-message span {
+    font-size: 12px;
+}
+
+.availability-card span:last-child {
+    color: #758b95;
+
     font-size: 10px;
-
-    letter-spacing: 2px;
-
-    font-weight: 700;
-}
-
-
-.image-message strong {
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
-
-    font-size: 21px;
-
-    font-weight: 500;
 }
 
 
@@ -335,23 +325,35 @@ h1 {
 ======================================== */
 
 @media (max-width: 1000px) {
+    .hero {
+        padding: 32px 22px 50px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr 0.85fr;
+    }
 
     .hero-content {
-        padding:
-            70px 40px;
+        padding: 50px 36px 40px;
     }
 
-
-    .hero-features {
-        gap: 18px;
+    .patient-info {
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 
-
-    .feature-icon {
-        width: 36px;
-        height: 36px;
+    .info-item,
+    .info-item:first-child,
+    .info-item:last-child {
+        padding: 0 0 14px;
+        border-right: 0;
+        border-bottom: 1px solid #edf2f3;
     }
 
+    .info-item:last-child {
+        padding-bottom: 0;
+        border-bottom: 0;
+    }
 }
 
 
@@ -359,35 +361,32 @@ h1 {
    MOBILE
 ======================================== */
 
-@media (max-width: 800px) {
-
+@media (max-width: 780px) {
     .hero {
-        grid-template-columns: 1fr;
+        padding: 18px 14px 38px;
     }
 
+    .hero-container {
+        grid-template-columns: 1fr;
+        border-radius: 14px;
+    }
 
     .hero-content {
-        padding:
-            60px 24px;
+        padding: 42px 24px 34px;
     }
-
 
     h1 {
-        font-size: 50px;
+        font-size: clamp(38px, 11vw, 50px);
+        letter-spacing: -1.5px;
     }
 
+    .hero-description {
+        font-size: 15px;
+    }
 
     .hero-image {
-        min-height: 480px;
+        min-height: 430px;
     }
-
-
-    .hero-features {
-        flex-direction: column;
-
-        margin-top: 40px;
-    }
-
 }
 
 
@@ -396,31 +395,24 @@ h1 {
 ======================================== */
 
 @media (max-width: 500px) {
-
-    h1 {
-        font-size: 42px;
-    }
-
-
-    .hero-description {
-        font-size: 15px;
-    }
-
-
     .hero-buttons {
-        flex-direction: column;
         align-items: stretch;
+        flex-direction: column;
     }
-
 
     .primary-button,
     .secondary-button {
         width: 100%;
     }
 
-
     .hero-image {
-        min-height: 380px;
+        min-height: 350px;
     }
 
+    .availability-card {
+        right: 16px;
+        left: 16px;
+        bottom: 16px;
+    }
 }
+

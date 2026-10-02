@@ -1,0 +1,109 @@
+:host {
+    display: block;
+    min-height: 100vh;
+    background: #f5f9fa;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.profile-page {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 20px;
+}
+
+.profile-card {
+    width: 100%;
+    max-width: 480px;
+    background: #ffffff;
+    border: 1px solid #dfeaec;
+    border-radius: 16px;
+    padding: 38px;
+}
+
+.icon {
+    width: 52px;
+    height: 52px;
+    margin-bottom: 24px;
+    border-radius: 12px;
+    background: #087f8c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+h1 {
+    margin: 0 0 8px;
+    color: #16324a;
+    font-size: 30px;
+}
+
+.subtitle {
+    margin: 0 0 30px;
+    color: #647781;
+    line-height: 1.5;
+}
+
+.field {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 7px;
+    color: #16324a;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 13px 14px;
+    border: 1px solid #cfdfe2;
+    border-radius: 8px;
+    font-size: 15px;
+    outline: none;
+}
+
+input:focus {
+    border-color: #087f8c;
+}
+
+input:disabled {
+    background: #f5f9fa;
+    color: #647781;
+}
+
+button {
+    width: 100%;
+    margin-top: 8px;
+    padding: 14px;
+    border: 0;
+    border-radius: 8px;
+    background: #087f8c;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #066c77;
+}
+
+button:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.error {
+    color: #a52828;
+    font-size: 14px;
+}
+.profile-card .sign-out-button { display: inline-flex; justify-content: center; align-items: center; width: auto; padding: 10px 18px; border: 1px solid #cbdcdf; border-radius: 9px; background: #fff; color: #32606b; font-size: 14px; font-weight: 600; }
+.profile-card .sign-out-button:hover { background: #edf7f8; border-color: #087f8c; }
+.profile-card .sign-out-button:focus-visible { outline: 3px solid #087f8c; outline-offset: 3px; }

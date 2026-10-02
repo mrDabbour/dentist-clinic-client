@@ -1,0 +1,119 @@
+<div class="booking-page">
+  <header class="booking-header">
+    <a routerLink="/" class="brand"><span class="brand-icon" aria-hidden="true">+</span>
+      <span><strong>Dintest Clinic</strong><small>Patient booking</small></span></a>
+    <a class="notification-link" routerLink="/my-appointments">My appointments</a><a class="notification-link" routerLink="/patient-notifications">My notifications</a><button class="sign-out-button" type="button" (click)="signOut()" [disabled]="isSubmitting">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5H5v14h4M13 8l4 4-4 4M9 12h11"/></svg>
+      Sign out
+    </button>
+  </header>
+  <main class="booking-container">
+    <div class="booking-intro"><span class="eyebrow">YOUR NEXT VISIT</span>
+      <h1>{{ booking ? (booking.status === 'Pending' ? 'Your request is received' : 'Your appointment') : 'Book your dental visit' }}</h1>
+      <p>{{ booking ? 'Your appointment details are below.' : 'Choose your care, find a time and review your appointment.' }}</p>
+    </div>
+    <p class="loading-state" role="status" *ngIf="isLoading">Loading your booking...</p>
+    <div class="error" role="alert" *ngIf="errorMessage">{{ errorMessage }}
+      <button class="text-button" type="button" *ngIf="!config && !isLoading" (click)="loadJourney()">Try again</button>
+    </div>
+    <section class="confirmation-card" *ngIf="booking as appointment">
+      <div class="success-mark" aria-hidden="true">&#10003;</div>
+      <span class="status-badge">{{ appointment.status === 'Pending' ? 'Awaiting confirmation' : appointment.status === 'NoShow' ? 'Missed appointment' : appointment.status }}</span>
+      <h2>Booking request #{{ appointment.id }}</h2>
+      <p *ngIf="appointment.status === 'Pending'">The clinic will review your request. Your appointment is not confirmed yet.</p>
+      <dl class="review-details">
+        <div><dt>Service</dt><dd>{{ appointment.serviceName }}</dd></div>
+        <div><dt>Dentist</dt><dd>{{ appointment.dentistName }}</dd></div>
+        <div><dt>Date</dt><dd>{{ formatDate(appointment.startTime) }}</dd></div>
+        <div><dt>Time</dt><dd>{{ formatTime(appointment.startTime) }} &ndash; {{ formatTime(appointment.endTime) }} ({{ config?.timeZone }})</dd></div>
+        <div><dt>Estimated fee (including GST)</dt><dd>{{ appointment.price | currency:'NZD':'symbol-narrow' }}</dd></div>
+      </dl>
+      <p class="request-note" *ngIf="appointment.status === 'Confirmed'">Your booking is confirmed. <a [routerLink]="['/invoice', appointment.id]">View invoice and arrange payment</a>.</p><div class="booking-actions"><a class="back-button" routerLink="/">Back to the clinic</a>
+        <button class="continue-button" type="button" (click)="newBooking()">Book another visit</button></div>
+    </section>
+    <ng-container *ngIf="config && !isLoading && !booking">
+      <nav class="steps" aria-label="Booking steps">
+        <button class="step" type="button" *ngFor="let label of steps; let i = index"
+          [class.active]="step === i + 1" [class.complete]="step > i + 1"
+          [attr.aria-current]="step === i + 1 ? 'step' : null" [disabled]="i + 1 > step || isSubmitting" (click)="goToStep(i + 1)">
+          <span>{{ step > i + 1 ? '✓' : i + 1 }}</span><strong>{{ label }}</strong>
+        </button>
+      </nav>
+      <div class="booking-layout">
+        <section class="booking-card" [attr.aria-busy]="isLoadingSlots || isSubmitting">
+          <div class="section-heading"><span class="step-label">STEP {{ step }} OF 4</span>
+            <h2>{{ step === 1 ? 'What can we help you with?' : step === 2 ? 'Choose your dentist' : step === 3 ? 'Find a time that suits you' : 'Review your appointment' }}</h2>
+            <p>{{ step === 1 ? 'Select a treatment to see its fee and duration.' : step === 2 ? 'Choose from our available clinicians.' : step === 3 ? 'Times are shown in the clinic timezone.' : 'Check your details before sending your booking request.' }}</p>
+          </div>
+          <ng-container *ngIf="step === 1">
+            <div class="choices-grid">
+              <button type="button" class="choice-card" *ngFor="let service of services"
+                [class.selected]="selectedService?.id === service.id" [attr.aria-pressed]="selectedService?.id === service.id" (click)="selectService(service)">
+                <span class="choice-heading"><strong>{{ service.name }}</strong><span class="choice-indicator" aria-hidden="true">{{ selectedService?.id === service.id ? '✓' : '+' }}</span></span>
+                <span class="choice-description">{{ service.description || 'Dental treatment and care.' }}</span>
+                <span class="choice-meta"><span>{{ service.durationMinutes }} min</span><strong>{{ service.price | currency:'NZD':'symbol-narrow' }} <small>incl. GST</small></strong></span>
+              </button>
+            </div>
+            <p class="empty-state" *ngIf="!services.length">No services are available for online booking. Please contact reception.</p>
+          </ng-container>
+          <ng-container *ngIf="step === 2">
+            <div class="choices-grid">
+              <button type="button" class="choice-card" *ngFor="let dentist of dentists" [class.selected]="selectedDentist?.id === dentist.id"
+                [attr.aria-pressed]="selectedDentist?.id === dentist.id" (click)="selectDentist(dentist)">
+                <span class="choice-heading"><strong>{{ dentist.firstName }} {{ dentist.lastName }}</strong><span class="choice-indicator" aria-hidden="true">{{ selectedDentist?.id === dentist.id ? '✓' : '+' }}</span></span>
+                <span class="specialty">{{ dentist.specialty || 'General dentistry' }}</span>
+                <span class="choice-description">{{ dentist.biography || 'Personalised dental care for your visit.' }}</span>
+              </button>
+            </div>
+            <p class="empty-state" *ngIf="!dentists.length">No dentists are available for online booking. Please contact reception.</p>
+          </ng-container>
+          <ng-container *ngIf="step === 3">
+            <label class="field-label" for="booking-date">Appointment date</label>
+            <input id="booking-date" class="date-input" type="date" [min]="config.minDate" [max]="config.maxDate"
+              [(ngModel)]="selectedDate" (ngModelChange)="loadSlots()">
+            <p class="schedule-note">{{ config.workingDays.join(', ') }} &middot; {{ config.opensAt }}&ndash;{{ config.closesAt }} &middot; {{ config.timeZone }}</p>
+            <h3 class="times-heading">Available times</h3>
+            <p class="loading-state" role="status" *ngIf="isLoadingSlots">Checking available times...</p>
+            <div class="error" role="alert" *ngIf="slotError">{{ slotError }} <button class="text-button" type="button" (click)="loadSlots()">Try again</button></div>
+            <div class="time-grid" *ngIf="!isLoadingSlots">
+              <button type="button" class="time-button" *ngFor="let slot of slots" [class.selected]="selectedSlot?.startTime === slot.startTime"
+                [attr.aria-pressed]="selectedSlot?.startTime === slot.startTime" (click)="selectSlot(slot)">{{ formatTime(slot.startTime) }}</button>
+            </div>
+            <p class="empty-state" *ngIf="!isLoadingSlots && !slotError && !slots.length">No times are available on this date. Please choose another day.</p>
+          </ng-container>
+          <ng-container *ngIf="step === 4">
+            <dl class="review-details">
+              <div><dt>Service <button type="button" class="text-button" (click)="goToStep(1)">Edit</button></dt><dd>{{ selectedService?.name }} &middot; {{ selectedService?.durationMinutes }} min</dd></div>
+              <div><dt>Dentist <button type="button" class="text-button" (click)="goToStep(2)">Edit</button></dt><dd>{{ selectedDentist?.firstName }} {{ selectedDentist?.lastName }}</dd></div>
+              <div><dt>Date and time <button type="button" class="text-button" (click)="goToStep(3)">Edit</button></dt><dd *ngIf="selectedSlot">{{ formatDate(selectedSlot.startTime) }}<br>{{ formatTime(selectedSlot.startTime) }} &ndash; {{ formatTime(selectedSlot.endTime) }} ({{ config.timeZone }})</dd></div>
+              <div><dt>Contact details <a class="text-button" routerLink="/patient-profile">Edit</a></dt><dd>{{ profile?.firstName }} {{ profile?.lastName }}<br>{{ profile?.email }}<br>{{ profile?.phone }}</dd></div>
+            </dl>
+            <label class="field-label" for="booking-notes">Anything you would like the clinic to know? <span>(optional)</span></label>
+            <textarea id="booking-notes" [(ngModel)]="notes" maxlength="1000" rows="3" [disabled]="isSubmitting"></textarea>
+            <p class="request-note">This sends a booking request. The clinic needs to confirm your appointment. The fee shown is an estimate.</p>
+          </ng-container>
+          <div class="booking-actions">
+            <button class="back-button" type="button" *ngIf="step > 1" (click)="goToStep(step - 1)" [disabled]="isSubmitting">&larr; Back</button>
+            <a class="back-button" routerLink="/" *ngIf="step === 1">Back to the clinic</a>
+            <button class="continue-button" type="button" *ngIf="step < 4" [disabled]="!canContinue" (click)="next()">
+              {{ step === 1 ? 'Continue to dentist' : step === 2 ? 'Choose date & time' : 'Review appointment' }} &rarr;
+            </button>
+            <button class="continue-button" type="button" *ngIf="step === 4" [disabled]="isSubmitting" (click)="submit()">
+              {{ isSubmitting ? 'Sending request...' : 'Request appointment' }}
+            </button>
+          </div>
+        </section>
+        <aside class="summary-card"><span class="summary-label">YOUR APPOINTMENT</span><h3>Booking summary</h3>
+          <div class="summary-item"><span>Service</span><strong>{{ selectedService?.name || 'Not selected' }}</strong></div>
+          <div class="summary-item"><span>Dentist</span><strong>{{ selectedDentist ? selectedDentist.firstName + ' ' + selectedDentist.lastName : 'Not selected' }}</strong></div>
+          <div class="summary-item"><span>Date & time</span><strong *ngIf="selectedSlot">{{ formatDate(selectedSlot.startTime) }}<br>{{ formatTime(selectedSlot.startTime) }}</strong><strong *ngIf="!selectedSlot">Not selected</strong></div>
+          <div class="summary-total"><span>Estimated fee (including GST)</span><strong>{{ selectedService ? (selectedService.price | currency:'NZD':'symbol-narrow') : 'Not selected' }}</strong></div>
+          <div class="help-box"><strong>Need help?</strong><p>Contact reception if you cannot find a suitable appointment.</p></div>
+        </aside>
+      </div>
+    </ng-container>
+  </main>
+</div>
+
+
+

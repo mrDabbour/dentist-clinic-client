@@ -1,221 +1,551 @@
-<div class="dashboard-layout">
-  <!-- Sidebar -->
-  <aside class="sidebar">
+<div class="dashboard-page">
+
+  <!-- =====================================
+       PAGE HEADER
+  ====================================== -->
+  <header class="dashboard-header">
+
     <div>
-      <div class="brand">
-        <div class="brand-icon">D</div>
-
-        <div>
-          <h2>Dintest</h2>
-          <span>Dental Clinic</span>
-        </div>
-      </div>
-
-      <nav class="nav-menu">
-        <a class="nav-item active">
-          <span>⌂</span>
-          Dashboard
-        </a>
-
-        <a class="nav-item" routerLink="/appointments">
-          <span>▣</span>
-          Appointments
-        </a>
-
-        <a class="nav-item">
-          <span>♙</span>
-          Patients
-        </a>
-
-        <a class="nav-item">
-          <span>+</span>
-          Dentists
-        </a>
-
-        <a class="nav-item">
-          <span>◇</span>
-          Services
-        </a>
-      </nav>
-    </div>
-
-    <button class="logout-button" (click)="logout()">Logout</button>
-  </aside>
-
-  <!-- Main Content -->
-  <main class="main-content">
-    <header class="topbar">
-      <div>
-        <p class="page-label">STAFF PORTAL</p>
-        <h1>Dashboard</h1>
-      </div>
-
-      <div class="staff-profile">
-        <div class="avatar">M</div>
-
-        <div>
-          <strong>Clinic Staff</strong>
-          <span>Administrator</span>
-        </div>
-      </div>
-    </header>
-
-    <section class="welcome-section">
-      <h2>Good to see you</h2>
-      <p>Here's what's happening at the clinic.</p>
-    </section>
-
-    <section class="summary-grid">
-      <div class="summary-card">
-        <span>Total Appointments</span>
-        <strong>{{ totalAppointments }}</strong>
-        <p>All scheduled appointments</p>
-      </div>
-
-      <div class="summary-card">
-        <span>Pending</span>
-        <strong>{{ pendingAppointments }}</strong>
-        <p>Waiting for confirmation</p>
-      </div>
-
-      <div class="summary-card">
-        <span>Completed</span>
-        <strong>{{ completedAppointments }}</strong>
-        <p>Finished appointments</p>
-      </div>
-    </section>
-    <!-- Temporary appointment area -->
-    <section class="appointments-section">
-      <div class="section-heading">
-        <div>
-          <p class="section-label">SCHEDULE</p>
-          <h2>Appointments</h2>
-        </div>
-      </div>
-
-      <p *ngIf="loading" class="state-message">Loading appointments...</p>
-
-      <p *ngIf="errorMessage" class="error-message">
-        {{ errorMessage }}
+      <p class="page-label">
+        STAFF PORTAL
       </p>
 
-      <div
-        class="appointment-card"
-        *ngFor="let appointment of activeAppointments"
-      >
-        <div class="appointment-time">
-          {{ appointment.startTime | date: "shortTime" }}
-        </div>
+      <h1>Your clinic, at a glance.</h1>
 
-        <div class="appointment-details">
-          <h3>
-            {{ appointment.patientName }}
-          </h3>
+      <p class="page-subtitle">
+        Choose an app and keep your day moving.
+      </p>
+    </div>
 
-          <p>Dr {{ appointment.dentistName }}</p>
 
-          <span class="appointment-date">
-            {{ appointment.startTime | date: "mediumDate" }}
+    <div class="staff-profile">
+
+      <div class="avatar">
+        D
+      </div>
+
+      <div class="staff-details">
+        <strong>Clinic Staff</strong>
+        <span>{{ staffRole }}</span>
+      </div>
+
+    </div>
+
+  </header>
+<section class="app-launcher" aria-labelledby="apps-heading">
+  <div class="launcher-heading"><div><p class="page-label">YOUR WORKSPACE</p><h2 id="apps-heading">Where would you like to go?</h2><p>Everything you need for the next step in patient care.</p></div>
+    <label class="app-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="10" cy="10" r="6"/><path d="m15 15 5 5"/></svg><span class="sr-only">Find a clinic app</span><input type="search" [(ngModel)]="appSearch" placeholder="Find an app..." autocomplete="off"></label></div>
+  <div class="launcher-layout" *ngIf="visibleApps.length; else noApps">
+    <nav class="app-grid" aria-label="Clinic apps">
+      <a *ngFor="let app of visibleApps" class="app-card" [routerLink]="app.route" [style.--app-accent]="app.accent" [class.previewed]="selectedApp.id === app.id" (mouseenter)="selectedAppId = app.id" (focus)="selectedAppId = app.id">
+        <div class="app-top"><span class="app-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path [attr.d]="app.icon"/></svg></span><span class="app-arrow" aria-hidden="true">&nearr;</span></div>
+        <h3>{{ app.title }}</h3><p>{{ app.description }}</p><span class="app-hint">{{ appHint(app) }}</span>
+      </a>
+    </nav>
+    <aside class="app-preview" [style.--app-accent]="selectedApp.accent" aria-labelledby="preview-heading">
+      <div class="preview-top"><span class="preview-eyebrow">A CLEAR NEXT STEP</span><span class="preview-tag">{{ today | date:'EEE, d MMM' }}</span></div>
+      <span class="preview-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path [attr.d]="selectedApp.icon"/></svg></span>
+      <h3 id="preview-heading">{{ selectedApp.title }}</h3><p>{{ selectedApp.description }}</p>
+      <ol class="preview-steps"><li *ngFor="let step of selectedApp.steps; let index = index"><span>{{ index + 1 }}</span>{{ step }}</li></ol>
+      <div class="next-visit" *ngIf="selectedApp.id === 'appointments' && nextAppointment as visit"><span>NEXT CONFIRMED VISIT</span><strong>{{ visit.patientName }}</strong><small>{{ visit.startTime | date:'mediumDate' }} &middot; {{ visit.startTime | date:'shortTime' }}</small></div>
+      <a class="open-app" [routerLink]="selectedApp.route">Open {{ selectedApp.title }} <span aria-hidden="true">&rarr;</span></a><small class="preview-footnote">Your dashboard is always one click away.</small>
+    </aside>
+  </div>
+  <ng-template #noApps><div class="no-apps"><strong>No apps match “{{ appSearch }}”</strong><p>Try appointments, patients, services or payments.</p><button type="button" (click)="appSearch = ''">Show all apps</button></div></ng-template>
+</section>
+
+
+  <!-- =====================================
+       OVERVIEW
+  ====================================== -->
+  <section class="overview-section">
+
+    <div class="section-title">
+      <h2>Overview</h2>
+      <p>Current clinic activity</p>
+    </div>
+
+
+    <div class="summary-grid">
+
+      <!-- Total -->
+      <article class="summary-card">
+
+        <div class="summary-header">
+          <span class="summary-label">
+            Appointments
+          </span>
+
+          <span class="summary-indicator total">
           </span>
         </div>
 
-        <div class="appointment-actions">
+        <strong class="summary-value">
+          {{ loading || errorMessage ? '—' : totalAppointments }}
+        </strong>
+
+        <p>
+          Total scheduled appointments
+        </p>
+
+      </article>
+
+
+      <!-- Pending -->
+      <article class="summary-card">
+
+        <div class="summary-header">
+          <span class="summary-label">
+            Pending
+          </span>
+
+          <span class="summary-indicator pending">
+          </span>
+        </div>
+
+        <strong class="summary-value">
+          {{ loading || errorMessage ? '—' : pendingAppointments }}
+        </strong>
+
+        <p>
+          Awaiting confirmation
+        </p>
+
+      </article>
+
+
+      <!-- Completed -->
+      <article class="summary-card">
+
+        <div class="summary-header">
+          <span class="summary-label">
+            Completed
+          </span>
+
+          <span class="summary-indicator completed">
+          </span>
+        </div>
+
+        <strong class="summary-value">
+          {{ loading || errorMessage ? '—' : completedAppointments }}
+        </strong>
+
+        <p>
+          Finished appointments
+        </p>
+
+      </article>
+
+    </div>
+
+  </section>
+
+
+  <!-- =====================================
+       ACTIVE APPOINTMENTS
+  ====================================== -->
+  <section class="dashboard-panel">
+
+    <div class="panel-header">
+
+      <div>
+        <p class="section-label">
+          SCHEDULE
+        </p>
+
+        <h2>
+          Current Appointments
+        </h2>
+
+        <p class="panel-description">
+          Appointments requiring clinic attention.
+        </p>
+      </div>
+
+
+      <a
+        routerLink="/appointments"
+        class="view-all-link"
+      >
+        View all appointments
+        <span>→</span>
+      </a>
+
+    </div>
+
+
+    <p class="action-feedback" role="status" *ngIf="actionMessage">{{ actionMessage }}</p>
+    <!-- Loading -->
+    <div
+      *ngIf="loading"
+      class="state-message"
+    >
+      Loading appointments...
+    </div>
+
+
+    <!-- Error -->
+    <div
+      *ngIf="errorMessage"
+      class="error-message"
+    >
+      {{ errorMessage }}
+    </div>
+
+
+    <!-- Desktop Headings -->
+    <div
+      class="appointment-heading"
+      *ngIf="
+        !loading &&
+        !errorMessage &&
+        activeAppointments.length > 0
+      "
+    >
+
+      <span>Time</span>
+      <span>Patient</span>
+      <span>Clinician</span>
+      <span>Date</span>
+      <span>Status / Actions</span>
+
+    </div>
+
+
+    <!-- Appointment -->
+    <div
+      class="appointment-row"
+      *ngFor="let appointment of activeAppointments"
+    >
+
+      <!-- Time -->
+      <div class="appointment-time">
+
+        {{
+          appointment.startTime
+            | date: "shortTime"
+        }}
+
+      </div>
+
+
+      <!-- Patient -->
+      <div class="patient-cell">
+
+        <strong>
+          {{ appointment.patientName }}
+        </strong>
+
+        <span>
+          {{ appointment.dentalServiceName }}
+        </span>
+
+      </div>
+
+
+      <!-- Dentist -->
+      <div class="dentist-cell">
+
+        <span class="mobile-label">
+          Clinician
+        </span>
+
+        <strong>
+          Dr {{ appointment.dentistName }}
+        </strong>
+
+      </div>
+
+
+      <!-- Date -->
+      <div class="date-cell">
+
+        <span class="mobile-label">
+          Date
+        </span>
+
+        {{
+          appointment.startTime
+            | date: "mediumDate"
+        }}
+
+      </div>
+
+
+      <!-- Status + Actions -->
+      <div class="appointment-actions">
+
+
+        <span
+          class="status"
+          [class.pending]="
+            appointment.status === 'Pending'
+          "
+          [class.confirmed]="
+            appointment.status === 'Confirmed'
+          "
+          [class.completed]="
+            appointment.status === 'Completed'
+          "
+          [class.cancelled]="
+            appointment.status === 'Cancelled'
+          "
+          [class.no-show]="
+            appointment.status === 'NoShow'
+          "
+        >
+
+          <span class="status-dot">
+          </span>
+
+          {{
+            appointment.status === 'NoShow'
+              ? 'No Show'
+              : appointment.status
+          }}
+
+        </span>
+
+
+        <div class="row-actions">
+
           <button
-            *ngIf="appointment.status === 'Confirmed'"
-            class="complete-button"
-            (click)="completeAppointment(appointment.id)"
+            *ngIf="
+              appointment.status === 'Pending'
+            "
+            type="button"
+             [disabled]="busyAppointments.has(appointment.id)" class="action-button primary"
+            (click)="
+              confirmAppointment(
+                appointment.id
+              )
+            "
+          >
+            Confirm
+          </button>
+
+
+          <button
+            *ngIf="
+              appointment.status === 'Confirmed'
+            "
+            type="button"
+             [disabled]="busyAppointments.has(appointment.id)" class="action-button success"
+            (click)="
+              completeAppointment(
+                appointment.id
+              )
+            "
           >
             Complete
           </button>
+
+
+          <button
+            *ngIf="
+              appointment.status === 'Confirmed'
+            "
+            type="button"
+             [disabled]="busyAppointments.has(appointment.id)" class="action-button warning"
+            (click)="
+              markNoShow(
+                appointment.id
+              )
+            "
+          >
+            No Show
+          </button>
+
+
           <button
             *ngIf="
               appointment.status === 'Pending' ||
               appointment.status === 'Confirmed'
             "
-            class="cancel-button"
-            (click)="cancelAppointment(appointment.id)"
+            type="button"
+             [disabled]="busyAppointments.has(appointment.id)" class="action-button danger"
+            (click)="
+              cancelAppointment(
+                appointment.id
+              )
+            "
           >
             Cancel
           </button>
 
-          <button
-            *ngIf="appointment.status === 'Confirmed'"
-            class="no-show-button"
-            (click)="markNoShow(appointment.id)"
-          >
-            No Show
-          </button>
-
-          <div
-            class="status"
-            [class.completed]="appointment.status === 'Completed'"
-            [class.pending]="appointment.status === 'Pending'"
-            [class.confirmed]="appointment.status === 'Confirmed'"
-            [class.cancelled]="appointment.status === 'Cancelled'"
-          >
-            {{ appointment.status }}
-          </div>
-
-          <button
-            *ngIf="appointment.status === 'Pending'"
-            class="confirm-button"
-            (click)="confirmAppointment(appointment.id)"
-          >
-            Confirm
-          </button>
         </div>
+
       </div>
 
-      <p
-        *ngIf="!loading && !errorMessage && appointments.length === 0"
-        class="state-message"
-      >
-        No appointments found.
+    </div>
+
+
+    <!-- Empty -->
+    <div
+      *ngIf="
+        !loading &&
+        !errorMessage &&
+        activeAppointments.length === 0
+      "
+      class="empty-state"
+    >
+
+      <div class="empty-symbol">
+        ✓
+      </div>
+
+      <h3>
+        Schedule is clear
+      </h3>
+
+      <p>
+        There are no active appointments requiring attention.
       </p>
-    </section>
 
-    <section class="appointments-section history-section">
-      <div class="section-heading">
-        <div>
-          <p class="section-label">RECORDS</p>
-          <h2>Appointment History</h2>
-        </div>
+    </div>
+
+  </section>
+
+
+  <!-- =====================================
+       HISTORY
+  ====================================== -->
+  <section class="dashboard-panel history-panel">
+
+    <div class="panel-header">
+
+      <div>
+
+        <p class="section-label">
+          RECORDS
+        </p>
+
+        <h2>
+          Recent Appointment History
+        </h2>
+
+        <p class="panel-description">
+          Recently completed, cancelled and missed appointments.
+        </p>
+
       </div>
 
-      <div
-        class="appointment-card history-card"
-        *ngFor="let appointment of appointmentHistory"
-      >
-        <div class="appointment-time">
-          {{ appointment.startTime | date: "shortTime" }}
-        </div>
+    </div>
 
-        <div class="appointment-details">
-          <h3>{{ appointment.patientName }}</h3>
 
-          <p>
-            Dr {{ appointment.dentistName }} ·
-            {{ appointment.dentalServiceName }}
-          </p>
+    <div
+      class="history-heading"
+      *ngIf="
+        appointmentHistory.length > 0
+      "
+    >
+      <span>Date</span>
+      <span>Patient</span>
+      <span>Clinician</span>
+      <span>Treatment</span>
+      <span>Status</span>
+    </div>
 
-          <span class="appointment-date">
-            {{ appointment.startTime | date: "mediumDate" }}
-          </span>
-        </div>
 
-        <div
+    <div
+      class="history-row"
+      *ngFor="
+        let appointment
+        of appointmentHistory
+      "
+    >
+
+      <!-- Date -->
+      <div class="history-date">
+
+        <strong>
+          {{
+            appointment.startTime
+              | date: "mediumDate"
+          }}
+        </strong>
+
+        <span>
+          {{
+            appointment.startTime
+              | date: "shortTime"
+          }}
+        </span>
+
+      </div>
+
+
+      <!-- Patient -->
+      <div class="history-patient">
+
+        <strong>
+          {{ appointment.patientName }}
+        </strong>
+
+      </div>
+
+
+      <!-- Dentist -->
+      <div class="history-dentist">
+
+        Dr {{ appointment.dentistName }}
+
+      </div>
+
+
+      <!-- Service -->
+      <div class="history-service">
+
+        {{ appointment.dentalServiceName }}
+
+      </div>
+
+
+      <!-- Status -->
+      <div>
+
+        <span
           class="status"
-          [class.completed]="appointment.status === 'Completed'"
-          [class.cancelled]="appointment.status === 'Cancelled'"
-          [class.no-show]="appointment.status === 'NoShow'"
+          [class.completed]="
+            appointment.status === 'Completed'
+          "
+          [class.cancelled]="
+            appointment.status === 'Cancelled'
+          "
+          [class.no-show]="
+            appointment.status === 'NoShow'
+          "
         >
-          {{ appointment.status }}
-        </div>
+
+          <span class="status-dot">
+          </span>
+
+          {{
+            appointment.status === 'NoShow'
+              ? 'No Show'
+              : appointment.status
+          }}
+
+        </span>
+
       </div>
 
-      <p *ngIf="appointmentHistory.length === 0" class="state-message">
+    </div>
+
+
+    <div
+      *ngIf="
+        appointmentHistory.length === 0
+      "
+      class="empty-state compact"
+    >
+
+      <p>
         No appointment history yet.
       </p>
-    </section>
-  </main>
+
+    </div>
+
+  </section>
+
 </div>

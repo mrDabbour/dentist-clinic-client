@@ -1,25 +1,40 @@
 <div class="patient-details-page">
 
+  <!-- Back -->
   <div class="top-bar">
     <a routerLink="/patients" class="back-link">
       ← Back to Patients
     </a>
   </div>
 
-  <p class="loading" *ngIf="loading">
+
+  <!-- Loading Patient -->
+  <p
+    class="loading"
+    *ngIf="loading"
+  >
     Loading patient...
   </p>
 
-  <div class="error-message" *ngIf="errorMessage">
+
+  <!-- Patient Error -->
+  <div
+    class="error-message"
+    *ngIf="errorMessage"
+  >
     {{ errorMessage }}
   </div>
 
+
+  <!-- Patient Content -->
   <div
     class="patient-container"
     *ngIf="!loading && !errorMessage && patient"
   >
 
-    <!-- Patient Header -->
+    <!-- =====================================
+         PATIENT HEADER
+    ====================================== -->
     <header class="patient-header">
 
       <div class="patient-identity">
@@ -30,6 +45,7 @@
         </div>
 
         <div>
+
           <span class="eyebrow">
             PATIENT RECORD
           </span>
@@ -42,13 +58,18 @@
           <p>
             Patient ID #{{ patient.id }}
           </p>
+
         </div>
 
       </div>
 
+
+      <!-- Edit Patient Button -->
       <button
         type="button"
         class="edit-button"
+        (click)="startEditing()"
+        *ngIf="!editing"
       >
         Edit Patient
       </button>
@@ -56,24 +77,163 @@
     </header>
 
 
-    <!-- Contact Information -->
-    <section class="details-card">
+    <!-- =====================================
+         EDIT PATIENT FORM
+    ====================================== -->
+    <section
+      class="details-card"
+      *ngIf="editing"
+    >
 
       <div class="card-header">
 
         <div>
-          <h2>Contact Information</h2>
+          <h2>Edit Patient</h2>
 
           <p>
-            Patient contact and account details.
+            Update the patient's contact information.
           </p>
         </div>
 
       </div>
 
+
       <div class="details-grid">
 
+        <!-- First Name -->
         <div class="detail-item">
+
+          <span class="detail-label">
+            First Name
+          </span>
+
+          <input
+            type="text"
+            [(ngModel)]="editPatient.firstName"
+          />
+
+        </div>
+
+
+        <!-- Last Name -->
+        <div class="detail-item">
+
+          <span class="detail-label">
+            Last Name
+          </span>
+
+          <input
+            type="text"
+            [(ngModel)]="editPatient.lastName"
+          />
+
+        </div>
+
+
+        <!-- Email -->
+        <div class="detail-item">
+
+          <span class="detail-label">
+            Email Address
+          </span>
+
+          <input
+            type="email"
+            [(ngModel)]="editPatient.email"
+          />
+
+        </div>
+
+
+        <!-- Phone -->
+        <div class="detail-item">
+
+          <span class="detail-label">
+            Phone Number
+          </span>
+
+          <input
+            type="tel"
+            [(ngModel)]="editPatient.phone"
+          />
+
+        </div>
+
+      </div>
+
+
+      <!-- Edit Error -->
+      <div
+        class="error-message"
+        *ngIf="editErrorMessage"
+      >
+        {{ editErrorMessage }}
+      </div>
+
+
+      <!-- Edit Buttons -->
+      <div class="edit-actions">
+
+        <button
+          type="button"
+          class="edit-button"
+          (click)="savePatient()"
+          [disabled]="saving"
+        >
+          {{ saving ? "Saving..." : "Save Changes" }}
+        </button>
+
+
+        <button
+          type="button"
+          class="cancel-button"
+          (click)="cancelEditing()"
+          [disabled]="saving"
+        >
+          Cancel
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- Success Message -->
+    <div
+      class="success-message"
+      *ngIf="editSuccessMessage"
+    >
+      {{ editSuccessMessage }}
+    </div>
+
+
+    <!-- =====================================
+         CONTACT INFORMATION
+    ====================================== -->
+    <section class="details-card">
+
+      <div class="card-header">
+
+        <div>
+
+          <h2>
+            Contact Information
+          </h2>
+
+          <p>
+            Patient contact and account details.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div class="details-grid">
+
+        <!-- First Name -->
+        <div class="detail-item">
+
           <span class="detail-label">
             First Name
           </span>
@@ -81,9 +241,13 @@
           <strong>
             {{ patient.firstName }}
           </strong>
+
         </div>
 
+
+        <!-- Last Name -->
         <div class="detail-item">
+
           <span class="detail-label">
             Last Name
           </span>
@@ -91,9 +255,13 @@
           <strong>
             {{ patient.lastName }}
           </strong>
+
         </div>
 
+
+        <!-- Email -->
         <div class="detail-item">
+
           <span class="detail-label">
             Email Address
           </span>
@@ -101,16 +269,21 @@
           <strong>
             {{ patient.email }}
           </strong>
+
         </div>
 
+
+        <!-- Phone -->
         <div class="detail-item">
+
           <span class="detail-label">
             Phone Number
           </span>
 
           <strong>
-            {{ patient.phone || 'Not provided' }}
+            {{ patient.phone || "Not provided" }}
           </strong>
+
         </div>
 
       </div>
@@ -118,23 +291,29 @@
     </section>
 
 
-    <!-- Appointment History -->
+    <!-- =====================================
+         APPOINTMENT HISTORY
+    ====================================== -->
     <section class="appointments-card">
 
       <div class="card-header">
 
         <div>
-          <h2>Appointments</h2>
+
+          <h2>
+            Appointments
+          </h2>
 
           <p>
             Appointment history for this patient.
           </p>
+
         </div>
 
       </div>
 
 
-      <!-- Loading -->
+      <!-- Appointments Loading -->
       <div
         class="empty-appointments"
         *ngIf="appointmentsLoading"
@@ -143,7 +322,7 @@
       </div>
 
 
-      <!-- Error -->
+      <!-- Appointments Error -->
       <div
         class="empty-appointments"
         *ngIf="
@@ -155,7 +334,7 @@
       </div>
 
 
-      <!-- Empty -->
+      <!-- No Appointments -->
       <div
         class="empty-appointments"
         *ngIf="
@@ -168,7 +347,7 @@
       </div>
 
 
-      <!-- Appointments -->
+      <!-- Appointment List -->
       <div
         class="appointment-history"
         *ngIf="
@@ -183,20 +362,27 @@
           *ngFor="let appointment of appointments"
         >
 
+          <!-- Service + Dentist -->
           <div class="appointment-main">
 
             <div>
+
               <span class="detail-label">
                 Service
               </span>
 
               <strong>
-                {{ appointment.dentalServiceName }}
+                {{
+                  appointment.dentalServiceName ||
+                  "Service not specified"
+                }}
               </strong>
+
             </div>
 
 
             <div>
+
               <span class="detail-label">
                 Dentist
               </span>
@@ -204,14 +390,17 @@
               <strong>
                 {{ appointment.dentistName }}
               </strong>
+
             </div>
 
           </div>
 
 
+          <!-- Date + Time + Status -->
           <div class="appointment-main">
 
             <div>
+
               <span class="detail-label">
                 Date
               </span>
@@ -219,13 +408,15 @@
               <strong>
                 {{
                   appointment.startTime
-                    | date:'mediumDate'
+                    | date: "mediumDate"
                 }}
               </strong>
+
             </div>
 
 
             <div>
+
               <span class="detail-label">
                 Time
               </span>
@@ -233,25 +424,34 @@
               <strong>
                 {{
                   appointment.startTime
-                    | date:'shortTime'
+                    | date: "shortTime"
                 }}
               </strong>
+
             </div>
 
 
             <div>
+
               <span class="detail-label">
                 Status
               </span>
 
-              <strong>
+              <span
+                class="status-badge"
+                [ngClass]="
+                  appointment.status.toLowerCase()
+                "
+              >
                 {{ appointment.status }}
-              </strong>
+              </span>
+
             </div>
 
           </div>
 
 
+          <!-- Notes -->
           <div
             class="appointment-notes"
             *ngIf="appointment.notes"

@@ -1,0 +1,9 @@
+<main class="notifications-page"><a routerLink="/book">&larr; Appointment booking</a><h1>My notifications</h1>
+  <p>Updates from your clinic and payment requests for confirmed appointments.</p>
+  <p role="status" *ngIf="isLoading">Loading notifications...</p><p role="alert" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p class="empty" *ngIf="!isLoading && !errorMessage && !notifications.length">You have no notifications yet. The clinic will notify you here after confirming your appointment.</p>
+  <article class="notification-card" *ngFor="let notification of notifications" [class.unread]="!notification.readAt">
+    <div><span class="badge" *ngIf="!notification.readAt">New</span><h2>Appointment confirmed</h2><p>{{ notification.message }}</p><small>{{ notification.createdAt | date:'medium' }}</small></div>
+    <button type="button" (click)="open(notification)">View booking details</button>
+  </article>
+</main>

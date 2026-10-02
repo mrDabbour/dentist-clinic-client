@@ -1,3 +1,12 @@
+import { MyAppointmentsComponent } from './components/my-appointments/my-appointments.component';
+import { AboutComponent } from './components/about/about.component';
+import { ContactComponent } from './components/contact/contact.component';
+import { TeamComponent } from './components/team/team.component';
+import { ServiceCatalogueComponent } from './components/service-catalogue/service-catalogue.component';
+import { InvoiceComponent } from './components/invoice/invoice.component';
+import { PatientNotificationsComponent } from './components/patient-notifications/patient-notifications.component';
+import { StaffBillingComponent } from './components/staff-billing/staff-billing.component';
+import { patientAuthGuard } from './guards/patient-auth.guard';
 import { NgModule } from '@angular/core';
 import {
   RouterModule,
@@ -31,8 +40,21 @@ import { DentistsComponent }
 import { authGuard }
   from './guards/auth.guard';
 
+import { PatientLoginComponent }
+  from './components/patient-login/patient-login.component';
+import { PatientProfileComponent }
+  from './components/patient-profile/patient-profile.component';
 
+import { BookAppointmentComponent }
+  from './components/book-appointment/book-appointment.component';
 const routes: Routes = [
+  { path: 'my-appointments', component: MyAppointmentsComponent, canActivate: [patientAuthGuard] },
+  { path: 'contact', component: ContactComponent },
+  { path: 'about', component: AboutComponent },
+  { path: 'team', component: TeamComponent },
+  { path: 'services', component: ServiceCatalogueComponent },
+  { path: 'invoice/:appointmentId', component: InvoiceComponent, canActivate: [patientAuthGuard] },
+  { path: 'patient-notifications', component: PatientNotificationsComponent, canActivate: [patientAuthGuard] },
 
   // =====================================
   // PUBLIC WEBSITE
@@ -48,7 +70,20 @@ const routes: Routes = [
     component: LoginComponent
   },
 
-
+  {
+    path: 'patient-login',
+    component: PatientLoginComponent
+  },
+  {
+    path: 'patient-profile',
+    component: PatientProfileComponent,
+    canActivate: [patientAuthGuard]
+  },
+  {
+    path: 'book',
+    component: BookAppointmentComponent,
+    canActivate: [patientAuthGuard]
+  },
   // =====================================
   // STAFF PORTAL
   // =====================================
@@ -59,6 +94,7 @@ const routes: Routes = [
     canActivate: [authGuard],
 
     children: [
+      { path: 'billing', component: StaffBillingComponent },
 
       {
         path: 'dashboard',
@@ -113,3 +149,4 @@ const routes: Routes = [
 
 })
 export class AppRoutingModule { }
+

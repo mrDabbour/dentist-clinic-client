@@ -1,0 +1,13 @@
+<main class="staff-billing"><h1>Invoices &amp; payments</h1><p>Verify bank deposits against your bank records before marking an invoice paid.</p>
+  <p role="status" *ngIf="isLoading">Loading invoices...</p><p role="alert" class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  <p *ngIf="!isLoading && !invoices.length">No invoices have been issued yet.</p>
+  <article class="invoice-row" *ngFor="let invoice of invoices"><div><strong>{{ invoice.number }}</strong><h2>{{ invoice.customerName }}</h2>
+    <p>{{ invoice.description }} &middot; {{ invoice.total | currency:invoice.currency:'symbol-narrow' }}</p>
+    <p *ngIf="invoice.gstRegistered">Subtotal {{ invoice.subtotal | currency:invoice.currency:'symbol-narrow' }} &middot; GST {{ invoice.gstAmount | currency:invoice.currency:'symbol-narrow' }}</p>
+    <span class="status">{{ invoice.paymentStatus === 'AwaitingVerification' ? 'Awaiting bank verification' : invoice.paymentStatus }}</span>
+    <p *ngIf="invoice.bankTransferReference">Patient reference: {{ invoice.bankTransferReference }}</p></div>
+    <div class="verification" *ngIf="invoice.paymentStatus === 'AwaitingVerification'"><label [for]="'verification-' + invoice.id">Bank deposit / transaction reference</label>
+      <input [id]="'verification-' + invoice.id" [(ngModel)]="reference[invoice.id]" maxlength="200" [disabled]="busyId !== null">
+      <button type="button" (click)="verify(invoice)" [disabled]="busyId !== null || !reference[invoice.id]?.trim()">{{ busyId === invoice.id ? 'Saving...' : 'Verify deposit and mark paid' }}</button></div>
+  </article>
+</main>

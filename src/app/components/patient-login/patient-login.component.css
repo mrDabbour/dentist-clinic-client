@@ -1,0 +1,20 @@
+:host { display: block; min-height: 80vh; background: #f5f9fa; color: #16324a; }
+.patient-login { width: min(460px, calc(100% - 32px)); margin: 0 auto; padding: 44px 0 64px; }
+.back-link { display: inline-block; margin-bottom: 22px; color: #32606b; text-decoration: none; }
+.login-card { background: white; border: 1px solid #dfeaec; border-radius: 20px; padding: 36px 32px; text-align: center; box-shadow: 0 12px 32px #16324a08; }
+.clinic-mark { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto 20px; background: #087f8c; color: white; border-radius: 14px; font-size: 32px; }
+.eyebrow { font-size: 12px; letter-spacing: .12em; color: #087f8c; font-weight: 700; }
+h1 { margin: 12px 0; font-size: 28px; line-height: 1.2; }
+.subtitle { color: #647781; line-height: 1.6; margin-bottom: 28px; }
+.google-area { min-height: 44px; }
+#google-signin-button { display: flex; justify-content: center; }
+.busy { pointer-events: none; opacity: .6; }
+.status { color: #32606b; font-size: 14px; }
+.privacy-note { margin: 26px 0; color: #647781; font-size: 13px; line-height: 1.65; }
+.staff-link { border-top: 1px solid #e6edef; padding-top: 20px; font-size: 14px; color: #647781; }
+a { color: #087f8c; }
+.error { margin-top: 20px; padding: 14px; color: #a52828; background: #fff5f5; border: 1px solid #f0cccc; border-radius: 10px; font-size: 14px; }
+.error p { margin: 0 0 12px; }
+.error button { border: 1px solid #a52828; border-radius: 6px; background: white; color: #a52828; padding: 8px 16px; cursor: pointer; }
+a:focus-visible, button:focus-visible { outline: 3px solid #087f8c; outline-offset: 4px; }
+@media (max-width: 480px) { .login-card { padding: 28px 20px; } h1 { font-size: 25px; } }
